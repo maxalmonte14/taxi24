@@ -6,7 +6,7 @@ import {
   Min,
 } from 'class-validator';
 
-export default class CreateTripDTO {
+export default class CreateRideDTO {
   @IsLatitude()
   originLatitude: string;
 

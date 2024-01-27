@@ -1,6 +1,6 @@
 import { IsBoolean } from 'class-validator';
 
-export default class UpdateTripDTO {
+export default class UpdateRideDTO {
   @IsBoolean()
   isCompleted: boolean;
 }

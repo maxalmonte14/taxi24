@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import sql from 'src/db';
-import Trip from './trip';
-import CreateTripDTO from './dto/create-trip-dto';
-import UpdateTripDTO from './dto/update-trip-dto';
+import Ride from './ride';
+import CreateRideDTO from './dto/create-ride-dto';
+import UpdateRideDTO from './dto/update-ride-dto';
 
 @Injectable()
-export class TripService {
-  async create(createTripDTO: CreateTripDTO): Promise<Trip> {
+export class RideService {
+  async create(createRideDTO: CreateRideDTO): Promise<Ride> {
     const result = await sql`
-      INSERT INTO "trips"
+      INSERT INTO "rides"
       (
         "origin_latitude",
         "origin_longitude",
@@ -18,18 +18,18 @@ export class TripService {
         "passenger_id"
       ) VALUES
       (
-        ${createTripDTO.originLatitude},
-        ${createTripDTO.originLongitude},
-        ${createTripDTO.destinationLatitude},
-        ${createTripDTO.destinationLongitude},
-        ${createTripDTO.driverId},
-        ${createTripDTO.passengerId}
+        ${createRideDTO.originLatitude},
+        ${createRideDTO.originLongitude},
+        ${createRideDTO.destinationLatitude},
+        ${createRideDTO.destinationLongitude},
+        ${createRideDTO.driverId},
+        ${createRideDTO.passengerId}
       )
       RETURNING id
     `;
 
     const [{ id }] = result;
-    const [trip] = await sql<Trip[]>`
+    const [ride] = await sql<Ride[]>`
       SELECT
       "id",
       "origin_latitude",
@@ -39,21 +39,21 @@ export class TripService {
       "driver_id",
       "passenger_id",
       "is_completed"
-      FROM "trips"
+      FROM "rides"
       WHERE "id" = ${id}
     `;
 
-    return trip;
+    return ride;
   }
 
-  async update(id: number, updateTripDTO: UpdateTripDTO): Promise<Trip> {
-    await sql<Trip[]>`
-      UPDATE "trips" SET
-      "is_completed" = ${updateTripDTO.isCompleted}
+  async update(id: number, updateRideDTO: UpdateRideDTO): Promise<Ride> {
+    await sql<Ride[]>`
+      UPDATE "rides" SET
+      "is_completed" = ${updateRideDTO.isCompleted}
       WHERE "id" = ${id};
     `;
 
-    const [trip] = await sql<Trip[]>`
+    const [ride] = await sql<Ride[]>`
       SELECT
       "id",
       "origin_latitude",
@@ -63,15 +63,15 @@ export class TripService {
       "driver_id",
       "passenger_id",
       "is_completed"
-      FROM "trips"
+      FROM "rides"
       WHERE "id" = ${id}
     `;
 
-    return trip;
+    return ride;
   }
 
-  async findActive(): Promise<Trip[]> {
-    const trips = await sql<Trip[]>`
+  async findActive(): Promise<Ride[]> {
+    const rides = await sql<Ride[]>`
       SELECT
       "id",
       "origin_latitude",
@@ -81,10 +81,10 @@ export class TripService {
       "driver_id",
       "passenger_id",
       "is_completed"
-      FROM "trips"
+      FROM "rides"
       WHERE "is_completed" = 'false'
     `;
 
-    return trips;
+    return rides;
   }
 }

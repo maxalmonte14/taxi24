@@ -1,4 +1,4 @@
-type Trip = {
+type Ride = {
   id: number;
   originLatitude: string;
   originLongitude: string;
@@ -9,4 +9,4 @@ type Trip = {
   passengerId: number;
 };
 
-export default Trip;
+export default Ride;
