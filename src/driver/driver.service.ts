@@ -55,7 +55,7 @@ export class DriverService {
 
   async find(id: number): Promise<Driver> {
     const driver = await sql<Driver[]>`
-      SELECT id, name, is_available
+      SELECT id, name, profile_picture
       FROM drivers
       WHERE id = ${id}
   `;
