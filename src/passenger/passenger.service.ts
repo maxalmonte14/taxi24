@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import Passenger from './passenger';
+import { Driver } from '../driver/entities/driver.entity';
+import { Passenger } from './entities/passenger.entity';
 import sql from 'src/db';
-import Driver from 'src/driver/driver';
 
 @Injectable()
 export class PassengerService {
