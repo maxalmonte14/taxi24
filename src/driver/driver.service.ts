@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import sql from '../db';
-import Driver from './driver';
+import { Driver } from './entities/driver.entity';
 import Coordinate from 'src/coordinate';
 
 @Injectable()
