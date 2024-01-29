@@ -13,6 +13,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { CreateRideDTO } from './dto/create-ride.dto';
@@ -57,17 +58,20 @@ export class RideController {
     return this.rideService.update(id, updateRideDTO);
   }
 
-  @Get('active')
-  @ApiOperation({
-    requestBody: { $ref: 'UpdateRideDTO' },
-    summary: 'Get the all the active rides',
-  })
+  @Get()
+  @ApiOperation({ summary: 'Get the the active rides' })
   @ApiOkResponse({
     description: 'Request has been successful.',
     isArray: true,
     type: Ride,
   })
-  async findActive(): Promise<Ride[]> {
-    return await this.rideService.findActive();
+  async findActive(
+    @Query() query: { active?: 'true' | 'false' },
+  ): Promise<Ride[]> {
+    if (query.active === 'true') {
+      return await this.rideService.findActive();
+    }
+
+    return await this.rideService.findAll();
   }
 }
