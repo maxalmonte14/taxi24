@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { DatabaseService } from '../database/database.service';
 import { Driver } from '../driver/entities/driver.entity';
 import { Passenger } from './entities/passenger.entity';
-import sql from 'src/db';
 
 @Injectable()
 export class PassengerService {
+  constructor(private databaseService: DatabaseService) {}
+
   async findAll(): Promise<Passenger[]> {
-    const passengers = await sql<Passenger[]>`
+    const passengers = await this.databaseService.connection<Passenger[]>`
       SELECT "id", "name", "profile_picture"
       FROM "passengers"
     `;
@@ -15,7 +17,7 @@ export class PassengerService {
   }
 
   async find(id: number): Promise<Passenger> {
-    const [passenger] = await sql<Passenger[]>`
+    const [passenger] = await this.databaseService.connection<Passenger[]>`
       SELECT "id", "name", "profile_picture"
       FROM "passengers"
       WHERE "id" = ${id}
@@ -25,7 +27,7 @@ export class PassengerService {
   }
 
   async findNearDriversByPassengerId(id: number): Promise<Driver[]> {
-    const drivers = await sql<Driver[]>`
+    const drivers = await this.databaseService.connection<Driver[]>`
       SELECT
         "d"."id",
         "d"."name",

@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import sql from 'src/db';
-import { Ride } from './entities/ride.entity';
 import { CreateRideDTO } from './dto/create-ride.dto';
+import { DatabaseService } from '../database/database.service';
+import { Ride } from './entities/ride.entity';
 import { UpdateRideDTO } from './dto/update-ride.dto';
 
 @Injectable()
 export class RideService {
+  constructor(private databaseService: DatabaseService) {}
+
   async create(createRideDTO: CreateRideDTO): Promise<Ride> {
-    const result = await sql`
+    const [{ id }] = await this.databaseService.connection`
       INSERT INTO "rides"
       (
         "origin_latitude",
@@ -28,8 +30,7 @@ export class RideService {
       RETURNING id
     `;
 
-    const [{ id }] = result;
-    const [createdRide] = await sql<Ride[]>`
+    const [createdRide] = await this.databaseService.connection<Ride[]>`
       SELECT
         "id",
         "origin_latitude",
@@ -47,13 +48,13 @@ export class RideService {
   }
 
   async update(id: number, updateRideDTO: UpdateRideDTO): Promise<Ride> {
-    await sql<Ride[]>`
+    await this.databaseService.connection<Ride[]>`
       UPDATE "rides" SET
       "is_completed" = ${updateRideDTO.is_completed}
       WHERE "id" = ${id};
     `;
 
-    const [result] = await sql<Ride[]>`
+    const [result] = await this.databaseService.connection<Ride[]>`
       SELECT
         "id",
         "origin_latitude",
@@ -71,7 +72,7 @@ export class RideService {
   }
 
   async findActive(): Promise<Ride[]> {
-    const rides = await sql<Ride[]>`
+    const rides = await this.databaseService.connection<Ride[]>`
       SELECT
         "id",
         "origin_latitude",

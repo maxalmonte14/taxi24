@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import sql from '../db';
+import { DatabaseService } from '../database/database.service';
 import { Driver } from './entities/driver.entity';
 
 @Injectable()
 export class DriverService {
+  constructor(private databaseService: DatabaseService) {}
+
   async findAll(): Promise<Driver[]> {
-    const drivers = await sql<Driver[]>`
+    const drivers = await this.databaseService.connection<Driver[]>`
       SELECT "id", "name", "profile_picture"
       FROM "drivers"
     `;
@@ -14,7 +16,7 @@ export class DriverService {
   }
 
   async findAvailable(): Promise<Driver[]> {
-    const drivers = await sql<Driver[]>`
+    const drivers = await this.databaseService.connection<Driver[]>`
       SELECT
         "d"."id",
         "d"."name",
@@ -29,7 +31,7 @@ export class DriverService {
   }
 
   async findInRadius(latitude: string, longitude: string): Promise<Driver[]> {
-    const drivers = await sql<Driver[]>`
+    const drivers = await this.databaseService.connection<Driver[]>`
       SELECT
         "d"."id",
         "d"."name",
@@ -49,7 +51,7 @@ export class DriverService {
   }
 
   async find(id: number): Promise<Driver> {
-    const [result] = await sql<Driver[]>`
+    const [result] = await this.databaseService.connection<Driver[]>`
       SELECT "id", "name", "profile_picture"
       FROM "drivers"
       WHERE "id" = ${id}
