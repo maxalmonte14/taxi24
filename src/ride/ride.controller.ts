@@ -1,5 +1,4 @@
 import {
-  ApiParam,
   ApiOperation,
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -38,15 +37,10 @@ export class RideController {
   })
   @ApiBadRequestResponse({ description: 'Request is invalid.' })
   async create(@Body() createRideDTO: CreateRideDTO): Promise<Ride> {
-    const ride = await this.rideService.create(createRideDTO);
-
-    console.log(ride);
-
-    return ride;
+    return await this.rideService.create(createRideDTO);
   }
 
   @Put(':id')
-  @ApiParam({ name: 'id', type: 'integer' })
   @ApiOperation({
     requestBody: { $ref: 'UpdateRideDTO' },
     summary: 'Update a ride',
@@ -57,12 +51,10 @@ export class RideController {
   })
   @ApiBadRequestResponse({ description: 'Request is invalid.' })
   async update(
-    @Param() params: { id: number },
+    @Param('id') id: number,
     @Body() updateRideDTO: UpdateRideDTO,
-  ) {
-    const ride = await this.rideService.update(params.id, updateRideDTO);
-
-    return ride;
+  ): Promise<Ride> {
+    return this.rideService.update(id, updateRideDTO);
   }
 
   @Get('active')
@@ -76,8 +68,6 @@ export class RideController {
     type: Ride,
   })
   async findActive(): Promise<Ride[]> {
-    const rides = await this.rideService.findActive();
-
-    return rides;
+    return await this.rideService.findActive();
   }
 }

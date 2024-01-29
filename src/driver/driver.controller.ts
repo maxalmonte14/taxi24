@@ -1,6 +1,5 @@
 import {
   ApiOperation,
-  ApiParam,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
@@ -10,9 +9,10 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
-import Coordinate from 'src/coordinate';
 import { Driver } from './entities/driver.entity';
 import { DriverService } from './driver.service';
 
@@ -23,34 +23,24 @@ export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all drivers' })
+  @ApiOperation({
+    summary: 'Get all drivers',
+    parameters: [{ name: 'available', in: 'query', required: false }],
+  })
   @ApiOkResponse({
     description: 'Request has been successful.',
     isArray: true,
     type: Driver,
   })
-  async findAll(): Promise<Driver[]> {
-    const drivers = await this.driverService.findAll();
+  async findAll(@Query() query): Promise<Driver[]> {
+    if (query?.available === 'true') {
+      return this.driverService.findAvailable();
+    }
 
-    return drivers;
+    return this.driverService.findAll();
   }
 
-  @Get('available')
-  @ApiOperation({ summary: 'Get all available drivers' })
-  @ApiOkResponse({
-    isArray: true,
-    description: 'Request has been successful.',
-    type: Driver,
-  })
-  async findAvailable(): Promise<Driver[]> {
-    const drivers = await this.driverService.findAvailable();
-
-    return drivers;
-  }
-
-  @Get('in-radius/:latitude/:longitude')
-  @ApiParam({ name: 'longitude', type: 'string' })
-  @ApiParam({ name: 'latitude', type: 'string' })
+  @Get('nearby')
   @ApiOperation({
     summary:
       'Get all available drivers in a 3 kms radius from the specified coordinates',
@@ -60,14 +50,14 @@ export class DriverController {
     isArray: true,
     type: Driver,
   })
-  async findInRadius(@Param() params: Coordinate): Promise<Driver[]> {
-    const drivers = await this.driverService.findInRadius(params);
-
-    return drivers;
+  async findInRadius(
+    @Query('latitude') latitude: string,
+    @Query('longitude') longitude: string,
+  ): Promise<Driver[]> {
+    return this.driverService.findInRadius(latitude, longitude);
   }
 
   @Get(':id')
-  @ApiParam({ name: 'id', type: 'integer' })
   @ApiOperation({
     summary: 'Get the driver with the specified id',
   })
@@ -75,9 +65,7 @@ export class DriverController {
   @ApiNotFoundResponse({
     description: 'We could not find a driver with the specified id.',
   })
-  async find(@Param() params: { id: number }): Promise<Driver> {
-    const driver = await this.driverService.find(params.id);
-
-    return driver;
+  async find(@Param('id', ParseIntPipe) id: number): Promise<Driver> {
+    return this.driverService.find(id);
   }
 }
