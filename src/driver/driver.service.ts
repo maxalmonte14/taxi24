@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import sql from '../db';
 import { Driver } from './entities/driver.entity';
-import Coordinate from 'src/coordinate';
 
 @Injectable()
 export class DriverService {
@@ -29,7 +28,7 @@ export class DriverService {
     return drivers.map((driver) => new Driver(driver));
   }
 
-  async findInRadius(coordinate: Coordinate): Promise<Driver[]> {
+  async findInRadius(latitude: string, longitude: string): Promise<Driver[]> {
     const drivers = await sql<Driver[]>`
       SELECT
         "d"."id",
@@ -42,7 +41,7 @@ export class DriverService {
       AND
       (ST_DistanceSphere(
         ST_MakePoint("dl"."latitude"::float, "dl"."longitude"::float),
-        ST_MakePoint(${coordinate.latitude}, ${coordinate.longitude})
+        ST_MakePoint(${latitude}, ${longitude})
       ) / 1000) <= 3
     `;
 

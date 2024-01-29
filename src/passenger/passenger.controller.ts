@@ -1,5 +1,4 @@
 import {
-  ApiParam,
   ApiOperation,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -30,16 +29,11 @@ export class PassengerController {
     type: Passenger,
   })
   async findAll(): Promise<Passenger[]> {
-    const passengers = await this.passengerService.findAll();
-
-    return passengers;
+    return this.passengerService.findAll();
   }
 
   @Get(':id')
-  @ApiParam({ name: 'id', type: 'integer' })
-  @ApiOperation({
-    summary: 'Get the passenger with the specified id',
-  })
+  @ApiOperation({ summary: 'Get the passenger with the specified id' })
   @ApiOkResponse({
     description: 'Request has been successful.',
     type: Passenger,
@@ -47,14 +41,11 @@ export class PassengerController {
   @ApiNotFoundResponse({
     description: 'We could not find a passenger with the specified id.',
   })
-  async find(@Param() params: { id: number }): Promise<Passenger> {
-    const passenger = await this.passengerService.find(params.id);
-
-    return passenger;
+  async find(@Param('id') id: number): Promise<Passenger> {
+    return this.passengerService.find(id);
   }
 
   @Get(':id/near-drivers')
-  @ApiParam({ name: 'id', type: 'integer' })
   @ApiOperation({
     summary: "Get the three drivers nearest to the passenger's location",
   })
@@ -66,11 +57,7 @@ export class PassengerController {
   @ApiNotFoundResponse({
     description: 'We could not find a passenger with the specified id.',
   })
-  async findNearDrivers(@Param() params: { id: number }): Promise<Driver[]> {
-    const drivers = await this.passengerService.findNearDriversByPassengerId(
-      params.id,
-    );
-
-    return drivers;
+  async findNearDrivers(@Param('id') id: number): Promise<Driver[]> {
+    return this.passengerService.findNearDriversByPassengerId(id);
   }
 }
