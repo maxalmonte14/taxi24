@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import sql from 'src/db';
-import Ride from './ride';
-import CreateRideDTO from './dto/create-ride-dto';
-import UpdateRideDTO from './dto/update-ride-dto';
+import { Ride } from './entities/ride.entity';
+import { CreateRideDTO } from './dto/create-ride.dto';
+import { UpdateRideDTO } from './dto/update-ride.dto';
 
 @Injectable()
 export class RideService {
