@@ -3,5 +3,5 @@ import { OmitType } from '@nestjs/swagger';
 
 export class CreateRideDTO extends OmitType(Ride, [
   'id',
-  'isCompleted',
+  'is_completed',
 ] as const) {}
