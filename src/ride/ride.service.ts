@@ -88,4 +88,21 @@ export class RideService {
 
     return rides.map((ride) => new Ride(ride));
   }
+
+  async findAll(): Promise<Ride[]> {
+    const rides = await this.databaseService.connection<Ride[]>`
+      SELECT
+        "id",
+        "origin_latitude",
+        "origin_longitude",
+        "destination_latitude",
+        "destination_longitude",
+        "driver_id",
+        "passenger_id",
+        "is_completed"
+      FROM "rides"
+    `;
+
+    return rides.map((ride) => new Ride(ride));
+  }
 }
