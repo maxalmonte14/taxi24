@@ -1,4 +1,5 @@
 import {
+  ApiParam,
   ApiOperation,
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -6,10 +7,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import CreateRideDTO from './dto/create-ride-dto';
+import CreateRideDTO from './dto/create-ride.dto';
 import { RideService } from './ride.service';
 import { Ride } from './entities/ride.entity';
-import UpdateRideDTO from './dto/update-ride-dto';
+import UpdateRideDTO from './dto/update-ride.dto';
 
 @ApiTags('rides')
 @Controller('rides')
@@ -33,9 +34,9 @@ export class RideController {
   }
 
   @Put(':id')
+  @ApiParam({ name: 'id', type: 'integer' })
   @ApiOperation({
     requestBody: { $ref: 'UpdateRideDTO' },
-    parameters: [{ in: 'path', name: 'id', required: true }],
     summary: 'Update a ride',
   })
   @ApiOkResponse({

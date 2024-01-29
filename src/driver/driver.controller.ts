@@ -1,5 +1,6 @@
 import {
   ApiOperation,
+  ApiParam,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
@@ -41,11 +42,9 @@ export class DriverController {
   }
 
   @Get('in-radius/:latitude/:longitude')
+  @ApiParam({ name: 'longitude', type: 'string' })
+  @ApiParam({ name: 'latitude', type: 'string' })
   @ApiOperation({
-    parameters: [
-      { in: 'path', name: 'latitude' },
-      { in: 'path', name: 'longitude' },
-    ],
     summary:
       'Get all available drivers in a 3 kms radius from the specified coordinates',
   })
@@ -61,8 +60,8 @@ export class DriverController {
   }
 
   @Get(':id')
+  @ApiParam({ name: 'id', type: 'integer' })
   @ApiOperation({
-    parameters: [{ in: 'path', name: 'id' }],
     summary: 'Get the driver with the specified id',
   })
   @ApiOkResponse({ description: 'Request has been successful.', type: Driver })

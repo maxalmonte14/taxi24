@@ -1,4 +1,5 @@
 import {
+  ApiParam,
   ApiOperation,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -28,8 +29,8 @@ export class PassengerController {
   }
 
   @Get(':id')
+  @ApiParam({ name: 'id', type: 'integer' })
   @ApiOperation({
-    parameters: [{ in: 'path', name: 'id', required: true }],
     summary: 'Get the passenger with the specified id',
   })
   @ApiOkResponse({
@@ -46,8 +47,8 @@ export class PassengerController {
   }
 
   @Get(':id/near-drivers')
+  @ApiParam({ name: 'id', type: 'integer' })
   @ApiOperation({
-    parameters: [{ in: 'path', name: 'id', required: true }],
     summary: "Get the three drivers nearest to the passenger's location",
   })
   @ApiOkResponse({
