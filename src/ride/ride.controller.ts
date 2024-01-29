@@ -6,7 +6,16 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseInterceptors,
+} from '@nestjs/common';
 import { CreateRideDTO } from './dto/create-ride.dto';
 import { RideService } from './ride.service';
 import { Ride } from './entities/ride.entity';
@@ -14,6 +23,7 @@ import { UpdateRideDTO } from './dto/update-ride.dto';
 
 @ApiTags('rides')
 @Controller('rides')
+@UseInterceptors(ClassSerializerInterceptor)
 export class RideController {
   constructor(private readonly rideService: RideService) {}
 
@@ -29,6 +39,8 @@ export class RideController {
   @ApiBadRequestResponse({ description: 'Request is invalid.' })
   async create(@Body() createRideDTO: CreateRideDTO): Promise<Ride> {
     const ride = await this.rideService.create(createRideDTO);
+
+    console.log(ride);
 
     return ride;
   }

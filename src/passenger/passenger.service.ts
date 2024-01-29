@@ -7,43 +7,43 @@ import sql from 'src/db';
 export class PassengerService {
   async findAll(): Promise<Passenger[]> {
     const passengers = await sql<Passenger[]>`
-      SELECT id, name, profile_picture
-      FROM passengers
+      SELECT "id", "name", "profile_picture"
+      FROM "passengers"
     `;
 
-    return passengers;
+    return passengers.map((passenger) => new Passenger(passenger));
   }
 
   async find(id: number): Promise<Passenger> {
-    const passenger = await sql<Passenger[]>`
-      SELECT id, name, profile_picture
-      FROM passengers
-      WHERE id = ${id}
-  `;
+    const [passenger] = await sql<Passenger[]>`
+      SELECT "id", "name", "profile_picture"
+      FROM "passengers"
+      WHERE "id" = ${id}
+    `;
 
-    return passenger[0];
+    return new Passenger(passenger);
   }
 
   async findNearDriversByPassengerId(id: number): Promise<Driver[]> {
     const drivers = await sql<Driver[]>`
       SELECT
-      drivers.id,
-      drivers.name,
-      drivers.profile_picture
-      FROM drivers
-      INNER JOIN drivers_location
-      ON drivers.id = drivers_location.driver_id
-      WHERE drivers_location.is_available = 'true'
+        "d"."id",
+        "d"."name",
+        "d"."profile_picture"
+      FROM "drivers" "d"
+      INNER JOIN "drivers_location" "dl"
+      ON "d"."id" = "dl"."driver_id"
+      WHERE "dl"."is_available" = 'true'
       ORDER BY
       (ST_DistanceSphere(
-        ST_MakePoint(drivers_location.latitude::float, drivers_location.longitude::float),
+        ST_MakePoint("dl"."latitude"::float, "dl"."longitude"::float),
         ST_MakePoint(
-          (SELECT longitude FROM passengers_location WHERE passenger_id = ${id} LIMIT 1)::float,
-          (SELECT latitude FROM passengers_location WHERE passenger_id = ${id} LIMIT 1)::float
+          (SELECT "longitude" FROM "passengers_location" WHERE "passenger_id" = ${id} LIMIT 1)::float,
+          (SELECT "latitude" FROM "passengers_location" WHERE "passenger_id" = ${id} LIMIT 1)::float
         )
       ) / 1000)
       LIMIT 3`;
 
-    return drivers;
+    return drivers.map((driver) => new Driver(driver));
   }
 }

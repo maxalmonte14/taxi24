@@ -5,13 +5,20 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Param,
+  UseInterceptors,
+} from '@nestjs/common';
 import Coordinate from 'src/coordinate';
 import { Driver } from './entities/driver.entity';
 import { DriverService } from './driver.service';
 
 @ApiTags('drivers')
 @Controller('drivers')
+@UseInterceptors(ClassSerializerInterceptor)
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 

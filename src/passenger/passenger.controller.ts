@@ -5,13 +5,20 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Param,
+  UseInterceptors,
+} from '@nestjs/common';
 import { Driver } from '../driver/entities/driver.entity';
 import { Passenger } from './entities/passenger.entity';
 import { PassengerService } from './passenger.service';
 
 @ApiTags('passengers')
 @Controller('passengers')
+@UseInterceptors(ClassSerializerInterceptor)
 export class PassengerController {
   constructor(private readonly passengerService: PassengerService) {}
 

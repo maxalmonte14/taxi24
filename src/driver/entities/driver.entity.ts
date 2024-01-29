@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import { IsInt, IsUrl, Min } from 'class-validator';
 
 export class Driver {
@@ -19,5 +20,10 @@ export class Driver {
    * @example https://example.com/picture.jpeg
    */
   @IsUrl()
-  profilePicture?: string;
+  @Expose({ name: 'profilePicture' })
+  profile_picture?: string;
+
+  constructor(partial: Partial<Driver>) {
+    Object.assign(this, partial);
+  }
 }
