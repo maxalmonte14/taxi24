@@ -1,6 +1,4 @@
-import { IsBoolean } from 'class-validator';
+import { Ride } from '../entities/ride.entity';
+import { PickType } from '@nestjs/swagger';
 
-export default class UpdateRideDTO {
-  @IsBoolean()
-  isCompleted: boolean;
-}
+export class UpdateRideDTO extends PickType(Ride, ['isCompleted'] as const) {}

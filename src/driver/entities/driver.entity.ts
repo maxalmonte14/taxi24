@@ -1,25 +1,23 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { IsInt, IsUrl, Min } from 'class-validator';
 
 export class Driver {
-  @ApiProperty({
-    example: 1,
-    description: 'the identifier of the resource',
-    readOnly: true,
-    type: 'integer',
-  })
+  /**
+   * The identifier of the resource
+   */
+  @IsInt()
+  @Min(1)
   id: number;
 
-  @ApiProperty({
-    example: 'Jane Doe',
-    description: 'the full name of the driver',
-    type: 'string',
-  })
+  /**
+   * The full name of the passenger
+   * @example John Doe
+   */
   name: string;
 
-  @ApiProperty({
-    example: 'https://example.com/picture.jpeg',
-    description: 'a URL pointing to an image file',
-    type: 'string',
-  })
-  profilePicture: string;
+  /**
+   * A URL pointing to an image file
+   * @example https://example.com/picture.jpeg
+   */
+  @IsUrl()
+  profilePicture?: string;
 }

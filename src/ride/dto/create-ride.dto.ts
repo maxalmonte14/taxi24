@@ -1,31 +1,7 @@
-import {
-  IsInt,
-  IsLatitude,
-  IsLongitude,
-  IsPositive,
-  Min,
-} from 'class-validator';
+import { Ride } from '../entities/ride.entity';
+import { OmitType } from '@nestjs/swagger';
 
-export default class CreateRideDTO {
-  @IsLatitude()
-  originLatitude: string;
-
-  @IsLongitude()
-  originLongitude: string;
-
-  @IsLatitude()
-  destinationLatitude: string;
-
-  @IsLongitude()
-  destinationLongitude: string;
-
-  @IsInt()
-  @IsPositive()
-  @Min(1)
-  driverId: number;
-
-  @IsInt()
-  @IsPositive()
-  @Min(1)
-  passengerId: number;
-}
+export class CreateRideDTO extends OmitType(Ride, [
+  'id',
+  'isCompleted',
+] as const) {}
