@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateRideDTO } from './dto/create-ride.dto';
 import { DatabaseService } from '../database/database.service';
 import { Ride } from './entities/ride.entity';
-import { UpdateRideDTO } from './dto/update-ride.dto';
+import { PatchRideDTO } from './dto/patch-ride.dto';
 
 @Injectable()
 export class RideService {
@@ -39,7 +39,8 @@ export class RideService {
         "destination_longitude",
         "driver_id",
         "passenger_id",
-        "is_completed"
+        "is_completed",
+        "created_at"
       FROM "rides"
       WHERE "id" = ${id}
     `;
@@ -47,7 +48,7 @@ export class RideService {
     return new Ride(createdRide);
   }
 
-  async update(id: number, updateRideDTO: UpdateRideDTO): Promise<Ride> {
+  async patch(id: number, updateRideDTO: PatchRideDTO): Promise<Ride> {
     await this.databaseService.connection<Ride[]>`
       UPDATE "rides" SET
       "is_completed" = ${updateRideDTO.is_completed}
@@ -63,7 +64,8 @@ export class RideService {
         "destination_longitude",
         "driver_id",
         "passenger_id",
-        "is_completed"
+        "is_completed",
+        "created_at"
       FROM "rides"
       WHERE "id" = ${id}
     `;
@@ -81,7 +83,8 @@ export class RideService {
         "destination_longitude",
         "driver_id",
         "passenger_id",
-        "is_completed"
+        "is_completed",
+        "created_at"
       FROM "rides"
       WHERE "is_completed" = ${active}
     `;
@@ -99,7 +102,8 @@ export class RideService {
         "destination_longitude",
         "driver_id",
         "passenger_id",
-        "is_completed"
+        "is_completed",
+        "created_at"
       FROM "rides"
     `;
 

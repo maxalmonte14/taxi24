@@ -12,15 +12,15 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
   Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { CreateRideDTO } from './dto/create-ride.dto';
 import { RideService } from './ride.service';
 import { Ride } from './entities/ride.entity';
-import { UpdateRideDTO } from './dto/update-ride.dto';
+import { PatchRideDTO } from './dto/patch-ride.dto';
 
 @ApiTags('rides')
 @Controller('rides')
@@ -42,7 +42,7 @@ export class RideController {
     return await this.rideService.create(createRideDTO);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @ApiOperation({
     requestBody: { $ref: 'UpdateRideDTO' },
     summary: 'Update a ride',
@@ -52,11 +52,11 @@ export class RideController {
     type: Ride,
   })
   @ApiBadRequestResponse({ description: 'Request is invalid.' })
-  async update(
+  async patch(
     @Param('id') id: number,
-    @Body() updateRideDTO: UpdateRideDTO,
+    @Body() updateRideDTO: PatchRideDTO,
   ): Promise<Ride> {
-    return this.rideService.update(id, updateRideDTO);
+    return this.rideService.patch(id, updateRideDTO);
   }
 
   @Get()

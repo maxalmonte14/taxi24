@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsInt, IsUrl, Min } from 'class-validator';
+import { IsInt, IsNotEmpty, IsUrl, Min } from 'class-validator';
 
 export class Driver {
   @IsInt()
@@ -8,6 +8,7 @@ export class Driver {
   @ApiProperty({ description: 'The identifier of the resource' })
   id: number;
 
+  @IsNotEmpty()
   @ApiProperty({
     description: 'The full name of the driver',
     example: 'John Doe',
