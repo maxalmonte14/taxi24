@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS "passengers" CASCADE;
 DROP TABLE IF EXISTS "rides" CASCADE;
 DROP TABLE IF EXISTS "driver_locations" CASCADE;
 DROP TABLE IF EXISTS "passenger_locations" CASCADE;
+DROP TABLE IF EXISTS "invoices" CASCADE;
 
 CREATE TABLE IF NOT EXISTS "drivers" (
   "id" INT GENERATED ALWAYS AS IDENTITY,
@@ -24,9 +25,10 @@ CREATE TABLE IF NOT EXISTS "rides" (
   "origin_longitude" VARCHAR(255) NOT NULL,
   "destination_latitude" VARCHAR(255) NOT NULL,
   "destination_longitude" VARCHAR(255) NOT NULL,
-  "is_completed" BOOLEAN NOT NULL,
+  "is_completed" BOOLEAN DEFAULT false NOT NULL,
   "driver_id" INT NOT NULL,
   "passenger_id" INT NOT NULL,
+  "created_at" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY("id"),
   CONSTRAINT "fk_driver" FOREIGN KEY("driver_id") REFERENCES "drivers"("id") ON DELETE CASCADE,
   CONSTRAINT "fk_passenger" FOREIGN KEY("passenger_id") REFERENCES "passengers"("id") ON DELETE CASCADE
@@ -50,6 +52,15 @@ CREATE TABLE IF NOT EXISTS "passenger_locations" (
   "is_riding" BOOLEAN NOT NULL,
   PRIMARY KEY("id"),
   CONSTRAINT "fk_passenger" FOREIGN KEY("passenger_id") REFERENCES "passengers"("id") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS "invoices" (
+  "id" INT GENERATED ALWAYS AS IDENTITY,
+  "price" DECIMAL(5,2) NOT NULL,
+  "ride_id" INT NOT NULL,
+  "created_at" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY("id"),
+  CONSTRAINT "fk_ride" FOREIGN KEY("ride_id") REFERENCES "rides"("id") ON DELETE CASCADE
 );
 
 INSERT INTO "drivers" ("name", "profile_picture") VALUES ('John Doe', 'https://randomuser.me/api/portraits/men/76.jpg');
@@ -234,7 +245,8 @@ VALUES
   8,
   8
 );
-INSERT INTO "rides" (
+INSERT INTO "rides"
+(
   "origin_latitude",
   "origin_longitude",
   "destination_latitude",
@@ -253,7 +265,8 @@ VALUES
   9,
   9
 );
-INSERT INTO "rides" (
+INSERT INTO "rides"
+(
   "origin_latitude",
   "origin_longitude",
   "destination_latitude",
@@ -314,3 +327,31 @@ INSERT INTO "passenger_locations" ("latitude", "longitude", "passenger_id", "is_
 VALUES ('18.466370570633448', '-69.91313891609235', 9, true);
 INSERT INTO "passenger_locations" ("latitude", "longitude", "passenger_id", "is_riding")
 VALUES ('18.477661956559363', '-69.91775878750549', 10, false);
+
+INSERT INTO "invoices" ("price", "ride_id") VALUES (6.78, 1);
+INSERT INTO "invoices" ("price", "ride_id") VALUES (4.64, 3);
+INSERT INTO "invoices" ("price", "ride_id") VALUES (6.87, 5);
+INSERT INTO "invoices" ("price", "ride_id") VALUES (5.68, 7);
+INSERT INTO "invoices" ("price", "ride_id") VALUES (5.16, 9);
+
+CREATE OR REPLACE FUNCTION create_invoice_function()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+  IF NEW.is_completed <> OLD.is_completed AND NEW.is_completed = true THEN
+    INSERT INTO invoices(price, ride_id) VALUES ((ST_DistanceSphere(
+        ST_MakePoint(OLD.origin_latitude::float, OLD.origin_longitude::float),
+        ST_MakePoint(OLD.destination_latitude::float, OLD.destination_longitude::float)
+      ) / 1000), OLD.id);
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER create_invoice_trigger
+AFTER UPDATE ON "rides"
+FOR EACH ROW
+EXECUTE PROCEDURE create_invoice_function();

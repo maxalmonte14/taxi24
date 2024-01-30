@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsInt, Min } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsInt,
+  IsLatitude,
+  IsLongitude,
+  Min,
+} from 'class-validator';
 
 export class Ride {
   @IsInt()
@@ -8,6 +15,7 @@ export class Ride {
   @ApiProperty({ description: 'The identifier of the resource' })
   id: number;
 
+  @IsLatitude()
   @Expose({ name: 'originLatitude' })
   @ApiProperty({
     description: 'A valid latitude represented as a floating point number',
@@ -16,6 +24,7 @@ export class Ride {
   })
   origin_latitude: string;
 
+  @IsLongitude()
   @Expose({ name: 'originLongitude' })
   @ApiProperty({
     description: 'A valid longitude represented as a floating point number',
@@ -24,6 +33,7 @@ export class Ride {
   })
   origin_longitude: string;
 
+  @IsLatitude()
   @Expose({ name: 'destinationLatitude' })
   @ApiProperty({
     description: 'A valid latitude represented as a floating point number',
@@ -32,6 +42,7 @@ export class Ride {
   })
   destination_latitude: string;
 
+  @IsLongitude()
   @Expose({ name: 'destinationLongitude' })
   @ApiProperty({
     description: 'A valid longitude represented as a floating point number',
@@ -40,6 +51,7 @@ export class Ride {
   })
   destination_longitude: string;
 
+  @IsBoolean()
   @Expose({ name: 'isCompleted' })
   @ApiProperty({
     description: 'A boolean representing if the ride has been completed',
@@ -47,20 +59,32 @@ export class Ride {
   })
   is_completed: boolean;
 
+  @IsInt()
+  @Min(1)
   @Expose({ name: 'driverId' })
   @ApiProperty({
-    description: ' The identifier of the driver associated with this resource',
+    description: 'The identifier of the driver associated with this resource',
     name: 'driverId',
   })
   driver_id: number;
 
+  @IsInt()
+  @Min(1)
   @Expose({ name: 'passengerId' })
   @ApiProperty({
     description:
-      ' The identifier of the passenger associated with this resource',
+      'The identifier of the passenger associated with this resource',
     name: 'passengerId',
   })
   passenger_id: number;
+
+  @IsDate()
+  @Expose({ name: 'createdAt' })
+  @ApiProperty({
+    description: 'A timestamp representing when the resource was created',
+    name: 'createdAt',
+  })
+  created_at: string;
 
   constructor(partial: Partial<Ride>) {
     Object.assign(this, partial);

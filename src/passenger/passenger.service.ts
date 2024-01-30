@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { Driver } from '../driver/entities/driver.entity';
 import { Passenger } from './entities/passenger.entity';
+import { Invoice } from 'src/invoice/entities/invoice.entity';
 
 @Injectable()
 export class PassengerService {
@@ -47,5 +48,22 @@ export class PassengerService {
       LIMIT 3`;
 
     return drivers.map((driver) => new Driver(driver));
+  }
+
+  async findInvoicesByPassengerId(passengerId: number): Promise<Invoice[]> {
+    const invoices = await this.databaseService.connection<Passenger[]>`
+      SELECT
+        "i"."id",
+        "i"."price",
+        "i"."created_at"
+      FROM "invoices" "i"
+      INNER JOIN "rides" "r"
+      ON "i"."ride_id" = "r"."id"
+      INNER JOIN "passengers" "p"
+      ON "r"."passenger_id" = "p"."id"
+      WHERE "r"."passenger_id" = ${passengerId}
+    `;
+
+    return invoices.map((invoice) => new Invoice(invoice));
   }
 }
