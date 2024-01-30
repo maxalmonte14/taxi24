@@ -14,6 +14,7 @@ import {
 import { Driver } from '../driver/entities/driver.entity';
 import { Passenger } from './entities/passenger.entity';
 import { PassengerService } from './passenger.service';
+import { Invoice } from 'src/invoice/entities/invoice.entity';
 
 @ApiTags('passengers')
 @Controller('passengers')
@@ -59,5 +60,16 @@ export class PassengerController {
   })
   async findNearDrivers(@Param('id') id: number): Promise<Driver[]> {
     return this.passengerService.findNearDriversByPassengerId(id);
+  }
+
+  @Get(':id/invoices')
+  @ApiOperation({ summary: 'Get all invoices belonging to a given passenger.' })
+  @ApiOkResponse({
+    description: 'Request has been successful.',
+    isArray: true,
+    type: Invoice,
+  })
+  async findInvoicesByPassengerId(@Param('id') id: number): Promise<Invoice[]> {
+    return this.passengerService.findInvoicesByPassengerId(id);
   }
 }
