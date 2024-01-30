@@ -8,6 +8,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  NotFoundException,
   Param,
   UseInterceptors,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { Driver } from '../driver/entities/driver.entity';
 import { Passenger } from './entities/passenger.entity';
 import { PassengerService } from './passenger.service';
 import { Invoice } from 'src/invoice/entities/invoice.entity';
+import { NotFoundResponse } from 'src/exception/dto/not-found-response.dto';
 
 @ApiTags('passengers')
 @Controller('passengers')
@@ -41,9 +43,14 @@ export class PassengerController {
   })
   @ApiNotFoundResponse({
     description: 'We could not find a passenger with the specified id.',
+    type: NotFoundResponse,
   })
   async find(@Param('id') id: number): Promise<Passenger> {
-    return this.passengerService.find(id);
+    try {
+      return await this.passengerService.find(id);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   @Get(':id/near-drivers')
@@ -57,9 +64,14 @@ export class PassengerController {
   })
   @ApiNotFoundResponse({
     description: 'We could not find a passenger with the specified id.',
+    type: NotFoundResponse,
   })
   async findNearDrivers(@Param('id') id: number): Promise<Driver[]> {
-    return this.passengerService.findNearDriversByPassengerId(id);
+    try {
+      return await this.passengerService.findNearDriversByPassengerId(id);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   @Get(':id/invoices')
@@ -69,7 +81,15 @@ export class PassengerController {
     isArray: true,
     type: Invoice,
   })
+  @ApiNotFoundResponse({
+    description: 'We could not find a passenger with the specified id.',
+    type: NotFoundResponse,
+  })
   async findInvoicesByPassengerId(@Param('id') id: number): Promise<Invoice[]> {
-    return this.passengerService.findInvoicesByPassengerId(id);
+    try {
+      return await this.passengerService.findInvoicesByPassengerId(id);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 }

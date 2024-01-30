@@ -12,7 +12,7 @@ import {
 export class Ride {
   @IsInt()
   @Min(1)
-  @ApiProperty({ description: 'The identifier of the resource' })
+  @ApiProperty({ description: 'The identifier of the resource', example: 1 })
   id: number;
 
   @IsLatitude()
@@ -64,6 +64,7 @@ export class Ride {
   @Expose({ name: 'driverId' })
   @ApiProperty({
     description: 'The identifier of the driver associated with this resource',
+    example: 1,
     name: 'driverId',
   })
   driver_id: number;
@@ -74,6 +75,7 @@ export class Ride {
   @ApiProperty({
     description:
       'The identifier of the passenger associated with this resource',
+    example: 1,
     name: 'passengerId',
   })
   passenger_id: number;

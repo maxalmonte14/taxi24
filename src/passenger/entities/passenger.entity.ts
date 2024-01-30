@@ -5,7 +5,7 @@ import { IsInt, IsUrl, Min } from 'class-validator';
 export class Passenger {
   @IsInt()
   @Min(1)
-  @ApiProperty({ description: 'The identifier of the resource' })
+  @ApiProperty({ description: 'The identifier of the resource', example: 1 })
   id: number;
 
   @ApiProperty({

@@ -51,12 +51,16 @@ export class DriverService {
   }
 
   async find(id: number): Promise<Driver> {
-    const [result] = await this.databaseService.connection<Driver[]>`
+    const [driver] = await this.databaseService.connection<Driver[]>`
       SELECT "id", "name", "profile_picture"
       FROM "drivers"
       WHERE "id" = ${id}
     `;
 
-    return new Driver(result);
+    if (!driver) {
+      throw new Error('We could not find a driver with the given id.');
+    }
+
+    return new Driver(driver);
   }
 }
