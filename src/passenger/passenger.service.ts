@@ -24,10 +24,30 @@ export class PassengerService {
       WHERE "id" = ${id}
     `;
 
+    if (!passenger) {
+      throw new Error('We could not find a passenger with the given id.');
+    }
+
     return new Passenger(passenger);
   }
 
-  async findNearDriversByPassengerId(id: number): Promise<Driver[]> {
+  private async failIfPassengerDoesNotExist(id: number) {
+    const [{ exists }] = await this.databaseService.connection<Passenger[]>`
+      SELECT EXISTS(
+        SELECT 1
+        FROM "passengers"
+        WHERE "id" = ${id}
+      ) AS "exists"
+    `;
+
+    if (!exists) {
+      throw new Error('We could not find a passenger with the given id.');
+    }
+  }
+
+  async findNearDriversByPassengerId(passengerId: number): Promise<Driver[]> {
+    await this.failIfPassengerDoesNotExist(passengerId);
+
     const drivers = await this.databaseService.connection<Driver[]>`
       SELECT
         "d"."id",
@@ -41,8 +61,8 @@ export class PassengerService {
       (ST_DistanceSphere(
         ST_MakePoint("dl"."latitude"::float, "dl"."longitude"::float),
         ST_MakePoint(
-          (SELECT "longitude" FROM "passengers_location" WHERE "passenger_id" = ${id} LIMIT 1)::float,
-          (SELECT "latitude" FROM "passengers_location" WHERE "passenger_id" = ${id} LIMIT 1)::float
+          (SELECT "longitude" FROM "passenger_locations" WHERE "passenger_id" = ${passengerId} LIMIT 1)::float,
+          (SELECT "latitude" FROM "passenger_locations" WHERE "passenger_id" = ${passengerId} LIMIT 1)::float
         )
       ) / 1000)
       LIMIT 3`;
@@ -51,6 +71,8 @@ export class PassengerService {
   }
 
   async findInvoicesByPassengerId(passengerId: number): Promise<Invoice[]> {
+    await this.failIfPassengerDoesNotExist(passengerId);
+
     const invoices = await this.databaseService.connection<Passenger[]>`
       SELECT
         "i"."id",

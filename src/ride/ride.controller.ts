@@ -1,6 +1,7 @@
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
@@ -18,9 +19,11 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { CreateRideDTO } from './dto/create-ride.dto';
-import { RideService } from './ride.service';
-import { Ride } from './entities/ride.entity';
+import { InvalidRequestResponse } from 'src/exception/dto/invalid-request-response.dto';
+import { NotFoundResponse } from 'src/exception/dto/not-found-response.dto';
 import { PatchRideDTO } from './dto/patch-ride.dto';
+import { Ride } from './entities/ride.entity';
+import { RideService } from './ride.service';
 
 @ApiTags('rides')
 @Controller('rides')
@@ -51,7 +54,14 @@ export class RideController {
     description: 'Ride has been updated successfully.',
     type: Ride,
   })
-  @ApiBadRequestResponse({ description: 'Request is invalid.' })
+  @ApiBadRequestResponse({
+    description: 'Request is invalid.',
+    type: InvalidRequestResponse,
+  })
+  @ApiNotFoundResponse({
+    description: 'We could not find a ride with the specified id.',
+    type: NotFoundResponse,
+  })
   async patch(
     @Param('id') id: number,
     @Body() updateRideDTO: PatchRideDTO,

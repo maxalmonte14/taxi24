@@ -9,12 +9,14 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  NotFoundException,
   Param,
   Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { Driver } from './entities/driver.entity';
 import { DriverService } from './driver.service';
+import { NotFoundResponse } from 'src/exception/dto/not-found-response.dto';
 
 @ApiTags('drivers')
 @Controller('drivers')
@@ -65,9 +67,13 @@ export class DriverController {
   @ApiOkResponse({ description: 'Request has been successful.', type: Driver })
   @ApiNotFoundResponse({
     description: 'We could not find a driver with the specified id.',
+    type: NotFoundResponse,
   })
   async find(@Param('id') id: number): Promise<Driver> {
-    console.log(id);
-    return this.driverService.find(id);
+    try {
+      return await this.driverService.find(id);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 }

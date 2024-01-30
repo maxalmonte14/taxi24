@@ -5,7 +5,7 @@ import { IsDate, IsDecimal, IsInt, MaxLength, Min } from 'class-validator';
 export class Invoice {
   @IsInt()
   @Min(1)
-  @ApiProperty({ description: 'The identifier of the resource' })
+  @ApiProperty({ description: 'The identifier of the resource', example: 1 })
   id: number;
 
   @IsDecimal({ decimal_digits: '2', force_decimal: true })
