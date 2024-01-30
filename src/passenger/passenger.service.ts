@@ -33,7 +33,7 @@ export class PassengerService {
         "d"."name",
         "d"."profile_picture"
       FROM "drivers" "d"
-      INNER JOIN "drivers_location" "dl"
+      INNER JOIN "driver_locations" "dl"
       ON "d"."id" = "dl"."driver_id"
       WHERE "dl"."is_available" = 'true'
       ORDER BY

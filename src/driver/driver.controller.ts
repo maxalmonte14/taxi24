@@ -1,7 +1,8 @@
 import {
-  ApiOperation,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import {
@@ -9,7 +10,6 @@ import {
   Controller,
   Get,
   Param,
-  ParseIntPipe,
   Query,
   UseInterceptors,
 } from '@nestjs/common';
@@ -23,18 +23,21 @@ export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 
   @Get()
-  @ApiOperation({
-    summary: 'Get all drivers',
-    parameters: [{ name: 'available', in: 'query', required: false }],
+  @ApiQuery({
+    description: 'Filters the resultset by driverLocation.isAvailable',
+    name: 'available',
+    required: false,
+    type: 'boolean',
   })
+  @ApiOperation({ summary: 'Get all drivers' })
   @ApiOkResponse({
     description: 'Request has been successful.',
     isArray: true,
     type: Driver,
   })
-  async findAll(@Query() query): Promise<Driver[]> {
-    if (query?.available === 'true') {
-      return this.driverService.findAvailable();
+  async findAll(@Query('available') available: boolean): Promise<Driver[]> {
+    if (available != undefined) {
+      return this.driverService.findAvailable(available);
     }
 
     return this.driverService.findAll();
@@ -58,14 +61,13 @@ export class DriverController {
   }
 
   @Get(':id')
-  @ApiOperation({
-    summary: 'Get the driver with the specified id',
-  })
+  @ApiOperation({ summary: 'Get the driver with the specified id' })
   @ApiOkResponse({ description: 'Request has been successful.', type: Driver })
   @ApiNotFoundResponse({
     description: 'We could not find a driver with the specified id.',
   })
-  async find(@Param('id', ParseIntPipe) id: number): Promise<Driver> {
+  async find(@Param('id') id: number): Promise<Driver> {
+    console.log(id);
     return this.driverService.find(id);
   }
 }

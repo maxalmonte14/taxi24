@@ -1,8 +1,9 @@
 import {
-  ApiOperation,
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import {
@@ -59,17 +60,21 @@ export class RideController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get the the active rides' })
+  @ApiQuery({
+    description: 'Filters the resultset by isCompleted',
+    name: 'active',
+    required: false,
+    type: 'boolean',
+  })
+  @ApiOperation({ summary: 'Get all the rides' })
   @ApiOkResponse({
     description: 'Request has been successful.',
     isArray: true,
     type: Ride,
   })
-  async findActive(
-    @Query() query: { active?: 'true' | 'false' },
-  ): Promise<Ride[]> {
-    if (query.active === 'true') {
-      return await this.rideService.findActive();
+  async findActive(@Query('active') active: boolean): Promise<Ride[]> {
+    if (active != undefined) {
+      return await this.rideService.findActive(active);
     }
 
     return await this.rideService.findAll();
