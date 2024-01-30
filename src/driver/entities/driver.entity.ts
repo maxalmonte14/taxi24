@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsInt, IsUrl, Min } from 'class-validator';
 
@@ -16,7 +16,7 @@ export class Driver {
 
   @IsUrl()
   @Expose({ name: 'profilePicture' })
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'A URL pointing to an image file',
     example: 'https://example.com/picture.jpeg',
     name: 'profilePicture',

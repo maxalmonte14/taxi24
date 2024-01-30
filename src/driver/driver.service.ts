@@ -15,16 +15,16 @@ export class DriverService {
     return drivers.map((driver) => new Driver(driver));
   }
 
-  async findAvailable(): Promise<Driver[]> {
+  async findAvailable(available: boolean): Promise<Driver[]> {
     const drivers = await this.databaseService.connection<Driver[]>`
       SELECT
         "d"."id",
         "d"."name",
         "d"."profile_picture"
       FROM "drivers" "d"
-      JOIN "drivers_location" "dl"
+      JOIN "driver_locations" "dl"
       ON "d"."id" = "dl"."driver_id"
-      WHERE "dl"."is_available" = 'true'
+      WHERE "dl"."is_available" = ${available}
     `;
 
     return drivers.map((driver) => new Driver(driver));
@@ -37,7 +37,7 @@ export class DriverService {
         "d"."name",
         "d"."profile_picture"
       FROM "drivers" "d"
-      JOIN "drivers_location" "dl"
+      JOIN "driver_locations" "dl"
       ON "d"."id" = "dl"."driver_id"
       WHERE "dl"."is_available" = 'true'
       AND
