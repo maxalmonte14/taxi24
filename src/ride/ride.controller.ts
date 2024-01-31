@@ -40,7 +40,10 @@ export class RideController {
     description: 'Ride has been created successfully.',
     type: Ride,
   })
-  @ApiBadRequestResponse({ description: 'Request is invalid.' })
+  @ApiBadRequestResponse({
+    description: 'Request is invalid.',
+    type: InvalidRequestResponse,
+  })
   async create(@Body() createRideDTO: CreateRideDTO): Promise<Ride> {
     return await this.rideService.create(createRideDTO);
   }

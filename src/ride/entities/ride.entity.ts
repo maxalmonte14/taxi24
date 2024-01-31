@@ -15,7 +15,7 @@ export class Ride {
   @ApiProperty({ description: 'The identifier of the resource', example: 1 })
   id: number;
 
-  @IsLatitude()
+  @IsLatitude({ message: 'originLatitude must be a latitude string or number' })
   @Expose({ name: 'originLatitude' })
   @ApiProperty({
     description: 'A valid latitude represented as a floating point number',
@@ -24,7 +24,9 @@ export class Ride {
   })
   origin_latitude: string;
 
-  @IsLongitude()
+  @IsLongitude({
+    message: 'originLongitude must be a longitude string or number',
+  })
   @Expose({ name: 'originLongitude' })
   @ApiProperty({
     description: 'A valid longitude represented as a floating point number',
@@ -33,7 +35,9 @@ export class Ride {
   })
   origin_longitude: string;
 
-  @IsLatitude()
+  @IsLatitude({
+    message: 'destinationLatitude must be a latitude string or number',
+  })
   @Expose({ name: 'destinationLatitude' })
   @ApiProperty({
     description: 'A valid latitude represented as a floating point number',
@@ -42,7 +46,9 @@ export class Ride {
   })
   destination_latitude: string;
 
-  @IsLongitude()
+  @IsLongitude({
+    message: 'destinationLongitude must be a longitude string or number',
+  })
   @Expose({ name: 'destinationLongitude' })
   @ApiProperty({
     description: 'A valid longitude represented as a floating point number',
@@ -59,8 +65,8 @@ export class Ride {
   })
   is_completed: boolean;
 
-  @IsInt()
-  @Min(1)
+  @IsInt({ message: 'driverId must be an integer number' })
+  @Min(1, { message: 'driverId must not be less than 1' })
   @Expose({ name: 'driverId' })
   @ApiProperty({
     description: 'The identifier of the driver associated with this resource',
@@ -69,8 +75,8 @@ export class Ride {
   })
   driver_id: number;
 
-  @IsInt()
-  @Min(1)
+  @IsInt({ message: 'passengerId must be an integer number' })
+  @Min(1, { message: 'passengerId must not be less than 1' })
   @Expose({ name: 'passengerId' })
   @ApiProperty({
     description:
