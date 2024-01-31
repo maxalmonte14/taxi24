@@ -39,7 +39,9 @@ export class DriverController {
   })
   async findAll(@Query('available') available: boolean): Promise<Driver[]> {
     if (available != undefined) {
-      return this.driverService.findAvailable(available);
+      return this.driverService.findAvailable(
+        available.toString() == 'true' ? true : false,
+      );
     }
 
     return this.driverService.findAll();

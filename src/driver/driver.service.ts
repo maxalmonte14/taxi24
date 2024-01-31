@@ -58,7 +58,7 @@ export class DriverService {
     `;
 
     if (!driver) {
-      throw new Error('We could not find a driver with the given id.');
+      throw new Error(`We could not find a driver with id: ${id}.`);
     }
 
     return new Driver(driver);
