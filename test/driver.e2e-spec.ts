@@ -124,4 +124,8 @@ describe('DriverController (e2e)', () => {
       statusCode: 404,
     });
   });
+
+  afterAll(async () => {
+    await app.close();
+  });
 });
