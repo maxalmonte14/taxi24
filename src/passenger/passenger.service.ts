@@ -76,7 +76,8 @@ export class PassengerService {
     const invoices = await this.databaseService.connection<Passenger[]>`
       SELECT
         "i"."id",
-        "i"."price",
+        "i"."price"::float,
+        "i"."ride_id",
         "i"."created_at"
       FROM "invoices" "i"
       INNER JOIN "rides" "r"
