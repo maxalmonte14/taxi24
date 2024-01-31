@@ -86,7 +86,7 @@ export class Ride {
     description: 'A timestamp representing when the resource was created',
     name: 'createdAt',
   })
-  created_at: string;
+  created_at: Date;
 
   constructor(partial: Partial<Ride>) {
     Object.assign(this, partial);

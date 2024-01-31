@@ -84,7 +84,7 @@ export class RideController {
   })
   async findActive(@Query('active') active: boolean): Promise<Ride[]> {
     if (active != undefined) {
-      return await this.rideService.findActive(active);
+      return await this.rideService.findWhereActive(active);
     }
 
     return await this.rideService.findAll();

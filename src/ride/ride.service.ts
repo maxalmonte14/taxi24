@@ -73,7 +73,7 @@ export class RideService {
     return new Ride(result);
   }
 
-  async findActive(active: boolean): Promise<Ride[]> {
+  async findWhereActive(active: boolean): Promise<Ride[]> {
     const rides = await this.databaseService.connection<Ride[]>`
       SELECT
         "id",
@@ -86,7 +86,7 @@ export class RideService {
         "is_completed",
         "created_at"
       FROM "rides"
-      WHERE "is_completed" = ${active}
+      WHERE "is_completed" = ${!active}
     `;
 
     return rides.map((ride) => new Ride(ride));
