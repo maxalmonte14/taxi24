@@ -1,4 +1,6 @@
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { DatabaseService } from '../database/database.service';
 import { DriverService } from './driver.service';
 
 describe('DriverService', () => {
@@ -6,7 +8,7 @@ describe('DriverService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [DriverService],
+      providers: [ConfigService, DatabaseService, DriverService],
     }).compile();
 
     service = module.get<DriverService>(DriverService);

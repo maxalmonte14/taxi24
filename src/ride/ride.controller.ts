@@ -19,8 +19,8 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { CreateRideDTO } from './dto/create-ride.dto';
-import { InvalidRequestResponse } from 'src/exception/dto/invalid-request-response.dto';
-import { NotFoundResponse } from 'src/exception/dto/not-found-response.dto';
+import { InvalidRequestResponse } from '../exception/dto/invalid-request-response.dto';
+import { NotFoundResponse } from '../exception/dto/not-found-response.dto';
 import { PatchRideDTO } from './dto/patch-ride.dto';
 import { Ride } from './entities/ride.entity';
 import { RideService } from './ride.service';

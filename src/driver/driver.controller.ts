@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { Driver } from './entities/driver.entity';
 import { DriverService } from './driver.service';
-import { NotFoundResponse } from 'src/exception/dto/not-found-response.dto';
+import { NotFoundResponse } from '../exception/dto/not-found-response.dto';
 
 @ApiTags('drivers')
 @Controller('drivers')

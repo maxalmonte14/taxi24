@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { Driver } from '../driver/entities/driver.entity';
 import { Passenger } from './entities/passenger.entity';
-import { Invoice } from 'src/invoice/entities/invoice.entity';
+import { Invoice } from '../invoice/entities/invoice.entity';
 
 @Injectable()
 export class PassengerService {
