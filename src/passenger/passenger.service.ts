@@ -25,7 +25,7 @@ export class PassengerService {
     `;
 
     if (!passenger) {
-      throw new Error('We could not find a passenger with the given id.');
+      throw new Error(`We could not find a passenger with id: ${id}.`);
     }
 
     return new Passenger(passenger);
@@ -41,7 +41,7 @@ export class PassengerService {
     `;
 
     if (!exists) {
-      throw new Error('We could not find a passenger with the given id.');
+      throw new Error(`We could not find a passenger with id: ${id}.`);
     }
   }
 
