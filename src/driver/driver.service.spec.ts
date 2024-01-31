@@ -84,10 +84,10 @@ describe('DriverService', () => {
   });
 
   it('can get a driver by id', async () => {
-    const drivers: Driver = await service.find(1);
+    const driver: Driver = await service.find(1);
 
-    expect(drivers).toBeInstanceOf(Driver);
-    expect(drivers).toEqual(
+    expect(driver).toBeInstanceOf(Driver);
+    expect(driver).toEqual(
       new Driver({
         id: 1,
         name: 'John Doe',
@@ -96,7 +96,7 @@ describe('DriverService', () => {
     );
   });
 
-  it('throws when trying to get a driver by id that does not exist', async () => {
+  it('throws error when trying to get a driver by id that does not exist', async () => {
     expect(service.find(99999)).rejects.toThrow(
       'We could not find a driver with the given id.',
     );
