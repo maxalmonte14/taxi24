@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsInt, IsUrl, Min } from 'class-validator';
+import { IsEmail, IsInt, IsNotEmpty, IsUrl, Min } from 'class-validator';
 
 export class Passenger {
   @IsInt()
@@ -8,11 +8,29 @@ export class Passenger {
   @ApiProperty({ description: 'The identifier of the resource', example: 1 })
   id: number;
 
+  @IsNotEmpty()
+  @Expose({ name: 'firstName' })
   @ApiProperty({
-    description: 'The full name of the passenger',
-    example: 'John Doe',
+    description: 'The first name of the passenger',
+    example: 'John',
   })
-  name: string;
+  first_name: string;
+
+  @IsNotEmpty()
+  @Expose({ name: 'lastName' })
+  @ApiProperty({
+    description: 'The last name of the passenger',
+    example: 'Doe',
+    name: 'lastName',
+  })
+  last_name: string;
+
+  @IsEmail()
+  @ApiProperty({
+    description: 'A valid email',
+    example: 'johndoe@example.con',
+  })
+  email: string;
 
   @IsUrl()
   @Expose({ name: 'profilePicture' })

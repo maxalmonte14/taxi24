@@ -1,13 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import {
-  IsBoolean,
   IsDate,
+  IsEnum,
   IsInt,
   IsLatitude,
   IsLongitude,
   Min,
 } from 'class-validator';
+import { RideStatus } from './ride-status';
 
 export class Ride {
   @IsInt()
@@ -57,13 +58,13 @@ export class Ride {
   })
   destination_longitude: string;
 
-  @IsBoolean()
-  @Expose({ name: 'isCompleted' })
+  @IsEnum(RideStatus)
   @ApiProperty({
-    description: 'A boolean representing if the ride has been completed',
-    name: 'isCompleted',
+    description:
+      'One of four possible values representing the state of the ride',
+    example: 'active',
   })
-  is_completed: boolean;
+  status: RideStatus;
 
   @IsInt({ message: 'driverId must be an integer number' })
   @Min(1, { message: 'driverId must not be less than 1' })

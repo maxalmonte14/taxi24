@@ -3,12 +3,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { DatabaseService } from '../database/database.service';
 import { Ride } from './entities/ride.entity';
 import { RideService } from './ride.service';
+import { RideStatus } from './entities/ride-status';
 
 describe('RideService', () => {
+  let module: TestingModule;
   let service: RideService;
 
-  beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+  beforeEach(async () => {
+    module = await Test.createTestingModule({
       providers: [ConfigService, DatabaseService, RideService],
     }).compile();
 
@@ -27,16 +29,22 @@ describe('RideService', () => {
   });
 
   it('can get all active rides', async () => {
-    const rides: Array<Ride> = await service.findWhereActive(true);
+    const rides: Array<Ride> = await service.findWhereActive(RideStatus.ACTIVE);
 
     expect(rides).toBeInstanceOf(Array<Ride>);
     expect(rides).toHaveLength(5);
   });
 
   it('can get all inactive rides', async () => {
-    const rides: Array<Ride> = await service.findWhereActive(false);
+    const rides: Array<Ride> = await service.findWhereActive(
+      RideStatus.COMPLETED,
+    );
 
     expect(rides).toBeInstanceOf(Array<Ride>);
     expect(rides).toHaveLength(5);
+  });
+
+  afterEach(async () => {
+    await module.close();
   });
 });

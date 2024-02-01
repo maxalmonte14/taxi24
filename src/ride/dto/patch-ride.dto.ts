@@ -1,13 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { Equals } from 'class-validator';
+import { IsIn } from 'class-validator';
+import { RideStatus } from '../entities/ride-status';
 
 export class PatchRideDTO {
-  @Equals(true, { message: () => 'isCompleted must be equal to true' })
-  @Expose({ name: 'isCompleted' })
+  @IsIn([RideStatus.CANCELLED, RideStatus.COMPLETED])
   @ApiProperty({
     description: 'A boolean representing if the ride has been completed',
-    name: 'isCompleted',
   })
-  is_completed: true;
+  status: true;
 }

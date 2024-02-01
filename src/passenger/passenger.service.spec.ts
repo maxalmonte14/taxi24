@@ -7,10 +7,11 @@ import { Passenger } from './entities/passenger.entity';
 import { PassengerService } from './passenger.service';
 
 describe('PassengerService', () => {
+  let module: TestingModule;
   let service: PassengerService;
 
-  beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+  beforeEach(async () => {
+    module = await Test.createTestingModule({
       providers: [ConfigService, DatabaseService, PassengerService],
     }).compile();
 
@@ -35,13 +36,15 @@ describe('PassengerService', () => {
     expect(passenger).toEqual(
       new Passenger({
         id: 1,
-        name: 'Daniel Miller',
+        first_name: 'Daniel',
+        last_name: 'Miller',
+        email: 'danielmiller@example.com',
         profile_picture: 'https://randomuser.me/api/portraits/men/75.jpg',
       }),
     );
   });
 
-  it('throws error when trying to get a passenger by id that does not exist', async () => {
+  it('throws error when trying to get a passenger by id that does not exist', () => {
     expect(service.find(99999)).rejects.toThrow(
       'We could not find a passenger with id: 99999.',
     );
@@ -56,17 +59,26 @@ describe('PassengerService', () => {
     expect(drivers).toEqual([
       new Driver({
         id: 6,
-        name: 'Emily Davis',
+        first_name: 'Emily',
+        last_name: 'Davis',
+        email: 'emilydavis@example.com',
+        license_number: '0000000006',
         profile_picture: null,
       }),
       new Driver({
         id: 4,
-        name: 'Samantha White',
+        first_name: 'Samantha',
+        last_name: 'White',
+        email: 'samanthawhite@example.com',
+        license_number: '0000000004',
         profile_picture: 'https://randomuser.me/api/portraits/women/41.jpg',
       }),
       new Driver({
         id: 8,
-        name: 'Sophia Taylor',
+        first_name: 'Sophia',
+        last_name: 'Taylor',
+        email: 'sophiataylor@example.com',
+        license_number: '0000000008',
         profile_picture: 'https://randomuser.me/api/portraits/women/27.jpg',
       }),
     ]);
@@ -85,9 +97,13 @@ describe('PassengerService', () => {
     expect(invoices).toHaveLength(1);
   });
 
-  it('throws error when trying to get invoices by a passenger id that does not exist', async () => {
+  it('throws error when trying to get invoices by a passenger id that does not exist', () => {
     expect(service.findInvoicesByPassengerId(99999)).rejects.toThrow(
       'We could not find a passenger with id: 99999.',
     );
+  });
+
+  afterEach(async () => {
+    await module.close();
   });
 });

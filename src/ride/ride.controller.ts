@@ -19,6 +19,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { CreateRideDTO } from './dto/create-ride.dto';
+import { GetRidesQueryParams } from './dto/get-rides-query-params.dto';
 import { InvalidRequestResponse } from '../exception/dto/invalid-request-response.dto';
 import { NotFoundResponse } from '../exception/dto/not-found-response.dto';
 import { PatchRideDTO } from './dto/patch-ride.dto';
@@ -74,10 +75,11 @@ export class RideController {
 
   @Get()
   @ApiQuery({
-    description: 'Filters the resultset by isCompleted',
-    name: 'active',
+    description:
+      'Filters the resultset by status: pending, active, completed, cancelled',
+    name: 'status',
     required: false,
-    type: 'boolean',
+    type: 'RideStatus',
   })
   @ApiOperation({ summary: 'Get all the rides' })
   @ApiOkResponse({
@@ -85,9 +87,9 @@ export class RideController {
     isArray: true,
     type: Ride,
   })
-  async findAll(@Query('active') active: boolean): Promise<Ride[]> {
-    if (active != undefined) {
-      return await this.rideService.findWhereActive(active);
+  async findAll(@Query() params: GetRidesQueryParams): Promise<Ride[]> {
+    if (params?.status != undefined) {
+      return await this.rideService.findWhereActive(params.status);
     }
 
     return await this.rideService.findAll();

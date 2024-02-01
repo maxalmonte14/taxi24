@@ -17,7 +17,7 @@ import {
 } from '@nestjs/common';
 import { Driver } from './entities/driver.entity';
 import { DriverService } from './driver.service';
-import { Coordinate } from './dto/coordinate.dto';
+import { FindInRadiusQueryParams } from './dto/find-in-radius-query-params.dto';
 import { InvalidRequestResponse } from '../exception/dto/invalid-request-response.dto';
 import { NotFoundResponse } from '../exception/dto/not-found-response.dto';
 
@@ -64,11 +64,10 @@ export class DriverController {
     description: 'Request is invalid.',
     type: InvalidRequestResponse,
   })
-  async findInRadius(@Query() coordinate: Coordinate): Promise<Driver[]> {
-    return this.driverService.findInRadius(
-      coordinate.latitude,
-      coordinate.longitude,
-    );
+  async findInRadius(
+    @Query() params: FindInRadiusQueryParams,
+  ): Promise<Driver[]> {
+    return this.driverService.findInRadius(params.latitude, params.longitude);
   }
 
   @Get(':id')

@@ -1,3 +1,4 @@
+import { RideStatus } from '../../src/ride/entities/ride-status';
 import { Ride } from '../../src/ride/entities/ride.entity';
 
 export const rideDataset = [
@@ -7,7 +8,7 @@ export const rideDataset = [
     origin_longitude: '-69.95092447279306',
     destination_latitude: '18.48564900782328',
     destination_longitude: '-69.93931318010746',
-    is_completed: true,
+    status: RideStatus.COMPLETED,
     driver_id: 1,
     passenger_id: 1,
     created_at: new Date('2024-01-31 15:09:57.820201'),
@@ -18,7 +19,7 @@ export const rideDataset = [
     origin_longitude: '-69.97763326077538',
     destination_latitude: '18.487234641192863',
     destination_longitude: '-70.00017055080171',
-    is_completed: false,
+    status: RideStatus.ACTIVE,
     driver_id: 2,
     passenger_id: 2,
     created_at: new Date('2024-01-31 15:09:57.823044'),
@@ -29,7 +30,7 @@ export const rideDataset = [
     origin_longitude: '-69.93473301349387',
     destination_latitude: '18.460822788714104',
     destination_longitude: '-69.91942939559058',
-    is_completed: true,
+    status: RideStatus.COMPLETED,
     driver_id: 3,
     passenger_id: 3,
     created_at: new Date('2024-01-31 15:09:57.825351'),
@@ -40,7 +41,7 @@ export const rideDataset = [
     origin_longitude: '-69.90846986883439',
     destination_latitude: '18.476417326071143',
     destination_longitude: '-69.88324792276927',
-    is_completed: false,
+    status: RideStatus.ACTIVE,
     driver_id: 4,
     passenger_id: 4,
     created_at: new Date('2024-01-31 15:09:57.82775'),
@@ -51,7 +52,7 @@ export const rideDataset = [
     origin_longitude: '-69.89557057973872',
     destination_latitude: '18.5442965460169',
     destination_longitude: '-69.86048468939171',
-    is_completed: true,
+    status: RideStatus.COMPLETED,
     driver_id: 5,
     passenger_id: 5,
     created_at: new Date('2024-01-31 15:09:57.830175'),

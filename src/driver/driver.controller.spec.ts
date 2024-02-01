@@ -8,25 +8,35 @@ import { NotFoundException } from '@nestjs/common';
 
 describe('DriverController', () => {
   let controller: DriverController;
+  let module: TestingModule;
   let service: DriverService;
   const resultset = [
     new Driver({
       id: 1,
-      name: 'John Doe',
+      first_name: 'John',
+      last_name: 'Doe',
+      email: 'johndoe@example.com',
+      license_number: '0000000001',
       profile_picture: 'https://example.com/picture1.jpeg',
     }),
     new Driver({
       id: 2,
-      name: 'Jane Doe',
+      first_name: 'Jane',
+      last_name: 'Doe',
+      email: 'janedoe@example.com',
+      license_number: '0000000002',
       profile_picture: 'https://example.com/picture2.jpeg',
     }),
   ];
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       controllers: [DriverController],
       providers: [DriverService, ConfigService, DatabaseService],
-    }).compile();
+    })
+      .overrideProvider(DatabaseService)
+      .useValue({})
+      .compile();
 
     controller = module.get<DriverController>(DriverController);
     service = module.get<DriverService>(DriverService);
@@ -44,32 +54,55 @@ describe('DriverController', () => {
     expect(controller.findAll(undefined)).resolves.toBe(resultset);
   });
 
-  it('can get all available drivers', async () => {
-    const result = resultset.filter((driver) => driver.id == 1);
+  it('can get all available drivers', () => {
+    const result = [
+      new Driver({
+        id: 1,
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'johndoe@example.com',
+        license_number: '0000000001',
+        profile_picture: 'https://example.com/picture1.jpeg',
+      }),
+    ];
 
     jest
-      .spyOn(service, 'findAll')
+      .spyOn(service, 'findAvailable')
       .mockImplementation(() => Promise.resolve(result));
 
     expect(controller.findAll(true)).resolves.toBe(result);
   });
 
-  it('can get all non-available drivers', async () => {
-    const result = resultset.filter((driver) => driver.id == 2);
+  it('can get all non-available drivers', () => {
+    const result = [
+      new Driver({
+        id: 2,
+        first_name: 'Jane',
+        last_name: 'Doe',
+        email: 'janedoe@example.com',
+        license_number: '0000000002',
+        profile_picture: 'https://example.com/picture2.jpeg',
+      }),
+    ];
 
     jest
-      .spyOn(service, 'findAll')
+      .spyOn(service, 'findAvailable')
       .mockImplementation(() => Promise.resolve(result));
 
     expect(controller.findAll(false)).resolves.toBe(result);
   });
 
-  it('can get all available drivers in a 3 kilometers radius', async () => {
+  it('can get all available drivers in a 3 kilometers radius', () => {
     jest
       .spyOn(service, 'findInRadius')
       .mockImplementation(() => Promise.resolve(resultset));
 
-    expect(controller.findAll(false)).resolves.toBe(resultset);
+    expect(
+      controller.findInRadius({
+        latitude: '18.441797768798327',
+        longitude: '-69.94382406539647',
+      }),
+    ).resolves.toBe(resultset);
   });
 
   it('can get a driver by id', () => {
@@ -88,5 +121,10 @@ describe('DriverController', () => {
     });
 
     expect(controller.find(99999)).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  afterEach(async () => {
+    jest.restoreAllMocks();
+    await module.close();
   });
 });

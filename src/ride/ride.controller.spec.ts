@@ -4,9 +4,11 @@ import { DatabaseService } from '../database/database.service';
 import { RideController } from './ride.controller';
 import { RideService } from './ride.service';
 import { Ride } from './entities/ride.entity';
+import { RideStatus } from './entities/ride-status';
 
 describe('RideController', () => {
   let controller: RideController;
+  let module: TestingModule;
   let service: RideService;
   const resultset = [
     new Ride({
@@ -17,7 +19,7 @@ describe('RideController', () => {
       destination_longitude: '-69.93931318010746',
       driver_id: 1,
       passenger_id: 1,
-      is_completed: true,
+      status: RideStatus.COMPLETED,
       created_at: new Date('2024-01-31T19:09:57.820Z'),
     }),
     new Ride({
@@ -28,16 +30,19 @@ describe('RideController', () => {
       destination_longitude: '-70.00017055080171',
       driver_id: 2,
       passenger_id: 2,
-      is_completed: false,
+      status: RideStatus.ACTIVE,
       created_at: new Date('2024-01-31T19:09:57.823Z'),
     }),
   ];
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       controllers: [RideController],
       providers: [ConfigService, DatabaseService, RideService],
-    }).compile();
+    })
+      .overrideProvider(DatabaseService)
+      .useValue({})
+      .compile();
 
     controller = module.get<RideController>(RideController);
     service = module.get<RideService>(RideService);
@@ -73,5 +78,10 @@ describe('RideController', () => {
       .mockImplementation(() => Promise.resolve(result));
 
     expect(controller.findAll(undefined)).resolves.toBe(result);
+  });
+
+  afterEach(async () => {
+    await module.close();
+    jest.restoreAllMocks();
   });
 });
