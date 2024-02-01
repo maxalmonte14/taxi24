@@ -15,8 +15,8 @@ import {
 import { Driver } from '../driver/entities/driver.entity';
 import { Passenger } from './entities/passenger.entity';
 import { PassengerService } from './passenger.service';
-import { Invoice } from 'src/invoice/entities/invoice.entity';
-import { NotFoundResponse } from 'src/exception/dto/not-found-response.dto';
+import { Invoice } from '../invoice/entities/invoice.entity';
+import { NotFoundResponse } from '../exception/dto/not-found-response.dto';
 
 @ApiTags('passengers')
 @Controller('passengers')

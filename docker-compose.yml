@@ -13,11 +13,24 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - taxi24-api
+  test-db:
+    image: postgis/postgis
+    restart: always
+    ports:
+      - ${DATABASE_PORT}:5432
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - taxi24-api
   adminer:
     image: adminer
     restart: always
     ports:
-      - 9001:8080
+      - 65535:8080
     networks:
       - taxi24-api
 networks:

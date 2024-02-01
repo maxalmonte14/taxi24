@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { Driver } from './entities/driver.entity';
 import { DriverService } from './driver.service';
-import { NotFoundResponse } from 'src/exception/dto/not-found-response.dto';
+import { NotFoundResponse } from '../exception/dto/not-found-response.dto';
 
 @ApiTags('drivers')
 @Controller('drivers')
@@ -39,7 +39,9 @@ export class DriverController {
   })
   async findAll(@Query('available') available: boolean): Promise<Driver[]> {
     if (available != undefined) {
-      return this.driverService.findAvailable(available);
+      return this.driverService.findAvailable(
+        available.toString() == 'true' ? true : false,
+      );
     }
 
     return this.driverService.findAll();

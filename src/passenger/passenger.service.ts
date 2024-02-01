@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { Driver } from '../driver/entities/driver.entity';
 import { Passenger } from './entities/passenger.entity';
-import { Invoice } from 'src/invoice/entities/invoice.entity';
+import { Invoice } from '../invoice/entities/invoice.entity';
 
 @Injectable()
 export class PassengerService {
@@ -25,7 +25,7 @@ export class PassengerService {
     `;
 
     if (!passenger) {
-      throw new Error('We could not find a passenger with the given id.');
+      throw new Error(`We could not find a passenger with id: ${id}.`);
     }
 
     return new Passenger(passenger);
@@ -41,7 +41,7 @@ export class PassengerService {
     `;
 
     if (!exists) {
-      throw new Error('We could not find a passenger with the given id.');
+      throw new Error(`We could not find a passenger with id: ${id}.`);
     }
   }
 
@@ -76,7 +76,8 @@ export class PassengerService {
     const invoices = await this.databaseService.connection<Passenger[]>`
       SELECT
         "i"."id",
-        "i"."price",
+        "i"."price"::float,
+        "i"."ride_id",
         "i"."created_at"
       FROM "invoices" "i"
       INNER JOIN "rides" "r"

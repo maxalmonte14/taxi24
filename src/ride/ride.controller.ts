@@ -19,8 +19,8 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { CreateRideDTO } from './dto/create-ride.dto';
-import { InvalidRequestResponse } from 'src/exception/dto/invalid-request-response.dto';
-import { NotFoundResponse } from 'src/exception/dto/not-found-response.dto';
+import { InvalidRequestResponse } from '../exception/dto/invalid-request-response.dto';
+import { NotFoundResponse } from '../exception/dto/not-found-response.dto';
 import { PatchRideDTO } from './dto/patch-ride.dto';
 import { Ride } from './entities/ride.entity';
 import { RideService } from './ride.service';
@@ -40,7 +40,10 @@ export class RideController {
     description: 'Ride has been created successfully.',
     type: Ride,
   })
-  @ApiBadRequestResponse({ description: 'Request is invalid.' })
+  @ApiBadRequestResponse({
+    description: 'Request is invalid.',
+    type: InvalidRequestResponse,
+  })
   async create(@Body() createRideDTO: CreateRideDTO): Promise<Ride> {
     return await this.rideService.create(createRideDTO);
   }
@@ -82,9 +85,9 @@ export class RideController {
     isArray: true,
     type: Ride,
   })
-  async findActive(@Query('active') active: boolean): Promise<Ride[]> {
+  async findAll(@Query('active') active: boolean): Promise<Ride[]> {
     if (active != undefined) {
-      return await this.rideService.findActive(active);
+      return await this.rideService.findWhereActive(active);
     }
 
     return await this.rideService.findAll();
