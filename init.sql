@@ -7,17 +7,24 @@ DROP TABLE IF EXISTS "invoices" CASCADE;
 
 CREATE TABLE IF NOT EXISTS "drivers" (
   "id" INT GENERATED ALWAYS AS IDENTITY,
-  "name" VARCHAR(255) NOT NULL,
+  "first_name" VARCHAR(255) NOT NULL,
+  "last_name" VARCHAR(255) NOT NULL,
+  "email" VARCHAR(255) UNIQUE NOT NULL,
+  "license_number" VARCHAR(255) UNIQUE NOT NULL,
   "profile_picture" VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY("id")
 );
 
 CREATE TABLE IF NOT EXISTS "passengers" (
   "id" INT GENERATED ALWAYS AS IDENTITY,
-  "name" VARCHAR(255) NOT NULL,
+  "first_name" VARCHAR(255) NOT NULL,
+  "last_name" VARCHAR(255) NOT NULL,
+  "email" VARCHAR(255) UNIQUE NOT NULL,
   "profile_picture" VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY("id")
 );
+
+CREATE TYPE RIDE_STATUS AS ENUM ('pending', 'active', 'completed', 'cancelled');
 
 CREATE TABLE IF NOT EXISTS "rides" (
   "id" INT GENERATED ALWAYS AS IDENTITY,
@@ -25,7 +32,7 @@ CREATE TABLE IF NOT EXISTS "rides" (
   "origin_longitude" VARCHAR(255) NOT NULL,
   "destination_latitude" VARCHAR(255) NOT NULL,
   "destination_longitude" VARCHAR(255) NOT NULL,
-  "is_completed" BOOLEAN DEFAULT false NOT NULL,
+  "status" RIDE_STATUS DEFAULT 'pending' NOT NULL,
   "driver_id" INT NOT NULL,
   "passenger_id" INT NOT NULL,
   "created_at" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -63,27 +70,276 @@ CREATE TABLE IF NOT EXISTS "invoices" (
   CONSTRAINT "fk_ride" FOREIGN KEY("ride_id") REFERENCES "rides"("id") ON DELETE CASCADE
 );
 
-INSERT INTO "drivers" ("name", "profile_picture") VALUES ('John Doe', 'https://randomuser.me/api/portraits/men/76.jpg');
-INSERT INTO "drivers" ("name", "profile_picture") VALUES ('Jane Smith', 'https://randomuser.me/api/portraits/women/16.jpg');
-INSERT INTO "drivers" ("name", "profile_picture") VALUES ('Robert Johnson', NULL);
-INSERT INTO "drivers" ("name", "profile_picture") VALUES ('Samantha White', 'https://randomuser.me/api/portraits/women/41.jpg');
-INSERT INTO "drivers" ("name", "profile_picture") VALUES ('Michael Brown', 'https://randomuser.me/api/portraits/men/90.jpg');
-INSERT INTO "drivers" ("name", "profile_picture") VALUES ('Emily Davis', NULL);
-INSERT INTO "drivers" ("name", "profile_picture") VALUES ('Christopher Lee', 'https://randomuser.me/api/portraits/men/92.jpg');
-INSERT INTO "drivers" ("name", "profile_picture") VALUES ('Sophia Taylor', 'https://randomuser.me/api/portraits/women/27.jpg');
-INSERT INTO "drivers" ("name", "profile_picture") VALUES ('David Wilson', NULL);
-INSERT INTO "drivers" ("name", "profile_picture") VALUES ('Olivia Harris', 'https://randomuser.me/api/portraits/women/55.jpg');
+INSERT INTO "drivers"
+(
+  "first_name",
+  "last_name",
+  "email",
+  "license_number",
+  "profile_picture"
+)
+VALUES
+(
+  'John',
+  'Doe',
+  'johndoe@example.com',
+  '0000000001',
+  'https://randomuser.me/api/portraits/men/76.jpg'
+);
+INSERT INTO "drivers"
+(
+  "first_name",
+  "last_name",
+  "email",
+  "license_number",
+  "profile_picture"
+)
+VALUES
+(
+  'Jane',
+  'Smith',
+  'janesmith@example.com',
+  '0000000002',
+  'https://randomuser.me/api/portraits/women/16.jpg'
+);
+INSERT INTO "drivers"
+(
+  "first_name",
+  "last_name",
+  "email",
+  "license_number",
+  "profile_picture"
+)
+VALUES
+(
+  'Robert',
+  'Johnson',
+  'robertjohnson@example.com',
+  '0000000003',
+  NULL
+);
+INSERT INTO "drivers"
+(
+  "first_name",
+  "last_name",
+  "email",
+  "license_number",
+  "profile_picture"
+)
+VALUES
+(
+  'Samantha',
+  'White',
+  'samanthawhite@example.com',
+  '0000000004',
+  'https://randomuser.me/api/portraits/women/41.jpg'
+);
+INSERT INTO "drivers"
+(
+  "first_name",
+  "last_name",
+  "email",
+  "license_number",
+  "profile_picture"
+)
+VALUES
+(
+  'Michael',
+  'Brown',
+  'michaelbrown@example.com',
+  '0000000005',
+  'https://randomuser.me/api/portraits/men/90.jpg'
+);
+INSERT INTO "drivers"
+(
+  "first_name",
+  "last_name",
+  "email",
+  "license_number",
+  "profile_picture"
+)
+VALUES
+(
+  'Emily',
+  'Davis',
+  'emilydavis@example.com',
+  '0000000006',
+NULL
+);
+INSERT INTO "drivers"
+(
+  "first_name",
+  "last_name",
+  "email",
+  "license_number",
+  "profile_picture"
+)
+VALUES
+(
+  'Christopher',
+  'Lee',
+  'christopherlee@example.com',
+  '0000000007',
+  'https://randomuser.me/api/portraits/men/92.jpg'
+);
+INSERT INTO "drivers"
+(
+  "first_name",
+  "last_name",
+  "email",
+  "license_number",
+  "profile_picture"
+)
+VALUES
+(
+  'Sophia',
+  'Taylor',
+  'sophiataylor@example.com',
+  '0000000008',
+  'https://randomuser.me/api/portraits/women/27.jpg'
+);
+INSERT INTO "drivers"
+(
+  "first_name",
+  "last_name",
+  "email",
+  "license_number",
+  "profile_picture"
+)
+VALUES
+(
+  'David',
+  'Wilson',
+  'davidwilson@example.com',
+  '0000000009',
+  NULL
+);
+INSERT INTO "drivers"
+(
+  "first_name",
+  "last_name",
+  "email", "license_number",
+  "profile_picture"
+)
+VALUES
+(
+  'Olivia',
+  'Harris',
+  'oliviaharris@example.com',
+  '0000000010',
+  'https://randomuser.me/api/portraits/women/55.jpg'
+);
 
-INSERT INTO "passengers" ("name", "profile_picture") VALUES ('Daniel Miller', 'https://randomuser.me/api/portraits/men/75.jpg');
-INSERT INTO "passengers" ("name", "profile_picture") VALUES ('Isabella Turner', 'https://randomuser.me/api/portraits/women/18.jpg');
-INSERT INTO "passengers" ("name", "profile_picture") VALUES ('Ethan Wright', NULL);
-INSERT INTO "passengers" ("name", "profile_picture") VALUES ('Madison Adams', 'https://randomuser.me/api/portraits/women/9.jpg');
-INSERT INTO "passengers" ("name", "profile_picture") VALUES ('Jackson Moore', 'https://randomuser.me/api/portraits/men/91.jpg');
-INSERT INTO "passengers" ("name", "profile_picture") VALUES ('Ava Collins', NULL);
-INSERT INTO "passengers" ("name", "profile_picture") VALUES ('Liam Turner', 'https://randomuser.me/api/portraits/men/63.jpg');
-INSERT INTO "passengers" ("name", "profile_picture") VALUES ('Aria Mitchell', 'https://randomuser.me/api/portraits/women/17.jpg');
-INSERT INTO "passengers" ("name", "profile_picture") VALUES ('Logan Davis', NULL);
-INSERT INTO "passengers" ("name", "profile_picture") VALUES ('Grace Turner', 'https://randomuser.me/api/portraits/women/3.jpg');
+INSERT INTO "passengers" (
+  "first_name",
+  "last_name",
+  "email",
+  "profile_picture"
+) VALUES (
+  'Daniel',
+  'Miller',
+  'danielmiller@example.com',
+  'https://randomuser.me/api/portraits/men/75.jpg'
+);
+INSERT INTO "passengers" (
+  "first_name",
+  "last_name",
+  "email",
+  "profile_picture"
+) VALUES (
+  'Isabella',
+  'Turner',
+  'isabellaturner@example.com',
+  'https://randomuser.me/api/portraits/women/18.jpg'
+);
+INSERT INTO "passengers" (
+  "first_name",
+  "last_name",
+  "email",
+  "profile_picture"
+) VALUES (
+  'Ethan',
+  'Wright',
+  'ethanwright@example.com',
+  NULL
+);
+INSERT INTO "passengers" (
+  "first_name",
+  "last_name",
+  "email",
+  "profile_picture"
+) VALUES (
+  'Madison',
+  'Adams',
+  'madisonadams@example.com',
+  'https://randomuser.me/api/portraits/women/9.jpg'
+);
+INSERT INTO "passengers" (
+  "first_name",
+  "last_name",
+  "email",
+  "profile_picture"
+) VALUES (
+  'Jackson',
+  'Moore',
+  'jacksonmoore@example.com',
+  'https://randomuser.me/api/portraits/men/91.jpg'
+);
+INSERT INTO "passengers" (
+  "first_name",
+  "last_name",
+  "email",
+  "profile_picture"
+) VALUES (
+  'Ava',
+  'Collins',
+  'avacollins@example.com',
+  NULL
+);
+INSERT INTO "passengers" (
+  "first_name",
+  "last_name",
+  "email",
+  "profile_picture"
+) VALUES (
+  'Liam',
+  'Turner',
+  'liamturner@example.com',
+  'https://randomuser.me/api/portraits/men/63.jpg'
+);
+INSERT INTO "passengers" (
+  "first_name",
+  "last_name",
+  "email",
+  "profile_picture"
+) VALUES (
+  'Aria',
+  'Mitchell',
+  'ariamitchell@example.com',
+  'https://randomuser.me/api/portraits/women/17.jpg'
+);
+INSERT INTO "passengers" (
+  "first_name",
+  "last_name",
+  "email",
+  "profile_picture"
+) VALUES (
+  'Logan',
+  'Davis',
+  'logandavis@example.com',
+  NULL
+);
+INSERT INTO "passengers" (
+  "first_name",
+  "last_name",
+  "email",
+  "profile_picture"
+) VALUES (
+  'Grace',
+  'Turner',
+  'graceturner@example.com',
+  'https://randomuser.me/api/portraits/women/3.jpg'
+);
 
 INSERT INTO "rides"
 (
@@ -91,7 +347,7 @@ INSERT INTO "rides"
   "origin_longitude",
   "destination_latitude",
   "destination_longitude",
-  "is_completed",
+  "status",
   "driver_id",
   "passenger_id"
 )
@@ -101,7 +357,7 @@ VALUES
   '-69.95092447279306',
   '18.48564900782328',
   '-69.93931318010746',
-  true,
+  'completed',
   1,
   1
 );
@@ -111,7 +367,7 @@ INSERT INTO "rides"
   "origin_longitude",
   "destination_latitude",
   "destination_longitude",
-  "is_completed",
+  "status",
   "driver_id",
   "passenger_id"
 )
@@ -121,7 +377,7 @@ VALUES
   '-69.97763326077538',
   '18.487234641192863',
   '-70.00017055080171',
-  false,
+  'active',
   2,
   2
 );
@@ -131,7 +387,7 @@ INSERT INTO "rides"
   "origin_longitude",
   "destination_latitude",
   "destination_longitude",
-  "is_completed",
+  "status",
   "driver_id",
   "passenger_id"
 )
@@ -141,7 +397,7 @@ VALUES
   '-69.93473301349387',
   '18.460822788714104',
   '-69.91942939559058',
-  true,
+  'completed',
   3,
   3
 );
@@ -151,7 +407,7 @@ INSERT INTO "rides"
   "origin_longitude",
   "destination_latitude",
   "destination_longitude",
-  "is_completed",
+  "status",
   "driver_id",
   "passenger_id"
 )
@@ -161,7 +417,7 @@ VALUES
   '-69.90846986883439',
   '18.476417326071143',
   '-69.88324792276927',
-  false,
+  'active',
   4,
   4
 );
@@ -171,7 +427,7 @@ INSERT INTO "rides"
   "origin_longitude",
   "destination_latitude",
   "destination_longitude",
-  "is_completed",
+  "status",
   "driver_id",
   "passenger_id"
 )
@@ -181,7 +437,7 @@ VALUES
   '-69.89557057973872',
   '18.5442965460169',
   '-69.86048468939171',
-  true,
+  'completed',
   5,
   5
 );
@@ -191,7 +447,7 @@ INSERT INTO "rides"
   "origin_longitude",
   "destination_latitude",
   "destination_longitude",
-  "is_completed",
+  "status",
   "driver_id",
   "passenger_id"
 )
@@ -201,7 +457,7 @@ VALUES
   '-69.9402775438603',
   '18.511134251244368',
   '-69.96382951700167',
-  false,
+  'active',
   6,
   6
 );
@@ -211,7 +467,7 @@ INSERT INTO "rides"
   "origin_longitude",
   "destination_latitude",
   "destination_longitude",
-  "is_completed",
+  "status",
   "driver_id",
   "passenger_id"
 )
@@ -221,7 +477,7 @@ VALUES
   '-69.89882896820293',
   '18.510933149816076',
   '-69.92756493675834',
-  true,
+  'completed',
   7,
   7
 );
@@ -231,7 +487,7 @@ INSERT INTO "rides"
   "origin_longitude",
   "destination_latitude",
   "destination_longitude",
-  "is_completed",
+  "status",
   "driver_id",
   "passenger_id"
 )
@@ -241,7 +497,7 @@ VALUES
   '-69.95630090531374',
   '18.452487550118363',
   '-69.97459482239825',
-  false,
+  'active',
   8,
   8
 );
@@ -251,7 +507,7 @@ INSERT INTO "rides"
   "origin_longitude",
   "destination_latitude",
   "destination_longitude",
-  "is_completed",
+  "status",
   "driver_id",
   "passenger_id"
 )
@@ -261,7 +517,7 @@ VALUES
   '-69.96920951512651',
   '18.45189237070058',
   '-69.95279553554698',
-  true,
+  'completed',
   9,
   9
 );
@@ -271,7 +527,7 @@ INSERT INTO "rides"
   "origin_longitude",
   "destination_latitude",
   "destination_longitude",
-  "is_completed",
+  "status",
   "driver_id",
   "passenger_id"
 )
@@ -281,7 +537,7 @@ VALUES
   '-69.94084953546606',
   '18.48004329066718',
   '-69.98443714876592',
-  false,
+  'active',
   10,
   10
 );
@@ -340,7 +596,7 @@ CREATE OR REPLACE FUNCTION create_invoice_function()
   AS
 $$
 BEGIN
-  IF NEW.is_completed <> OLD.is_completed AND NEW.is_completed = true THEN
+  IF NEW.status <> OLD.status AND NEW.status = 'completed' THEN
     INSERT INTO invoices(price, ride_id) VALUES ((ST_DistanceSphere(
         ST_MakePoint(OLD.origin_latitude::float, OLD.origin_longitude::float),
         ST_MakePoint(OLD.destination_latitude::float, OLD.destination_longitude::float)
