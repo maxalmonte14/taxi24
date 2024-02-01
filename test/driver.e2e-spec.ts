@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { DriverModule } from '../src/driver/driver.module';
 import { DriverService } from '../src/driver/driver.service';
@@ -17,6 +17,8 @@ describe('DriverController (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
+
+    app.useGlobalPipes(new ValidationPipe());
     await app.init();
   });
 
@@ -107,6 +109,20 @@ describe('DriverController (e2e)', () => {
           profilePicture: 'https://randomuser.me/api/portraits/women/41.jpg',
         },
       ]);
+  });
+
+  it('/drivers/nearby (GET) 400', () => {
+    return request(app.getHttpServer())
+      .get('/drivers/nearby')
+      .expect(400)
+      .expect({
+        message: [
+          'latitude must be a latitude string or number',
+          'longitude must be a longitude string or number',
+        ],
+        error: 'Bad Request',
+        statusCode: 400,
+      });
   });
 
   it('/drivers/1 (GET)', () => {
