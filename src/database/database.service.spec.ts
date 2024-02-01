@@ -3,10 +3,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { DatabaseService } from './database.service';
 
 describe('DatabaseService', () => {
+  let module: TestingModule;
   let service: DatabaseService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [ConfigService, DatabaseService],
     }).compile();
 
@@ -15,5 +16,9 @@ describe('DatabaseService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  afterEach(async () => {
+    await module.close();
   });
 });

@@ -10,25 +10,33 @@ import { PassengerService } from './passenger.service';
 
 describe('PassengerController', () => {
   let controller: PassengerController;
+  let module: TestingModule;
   let service: PassengerService;
   const resultset = [
     new Passenger({
       id: 1,
-      name: 'John Doe',
+      first_name: 'John',
+      last_name: 'Doe',
+      email: 'johndoe@example.com',
       profile_picture: 'https://example.com/picture1.jpeg',
     }),
     new Passenger({
       id: 2,
-      name: 'Jane Doe',
+      first_name: 'Jane',
+      last_name: 'Doe',
+      email: 'janedoe@example.com',
       profile_picture: 'https://example.com/picture2.jpeg',
     }),
   ];
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       controllers: [PassengerController],
       providers: [ConfigService, DatabaseService, PassengerService],
-    }).compile();
+    })
+      .overrideProvider(DatabaseService)
+      .useValue({})
+      .compile();
 
     controller = module.get<PassengerController>(PassengerController);
     service = module.get<PassengerService>(PassengerService);
@@ -68,17 +76,23 @@ describe('PassengerController', () => {
     const driverResultset = [
       new Driver({
         id: 6,
-        name: 'Emily Davis',
+        first_name: 'Emily',
+        last_name: 'Davis',
+        email: 'emilydavis@example.com',
         profile_picture: null,
       }),
       new Driver({
         id: 4,
-        name: 'Samantha White',
+        first_name: 'Samantha',
+        last_name: 'White',
+        email: 'samanthawhite@example.com',
         profile_picture: 'https://randomuser.me/api/portraits/women/41.jpg',
       }),
       new Driver({
         id: 8,
-        name: 'Sophia Taylor',
+        first_name: 'Sophia',
+        last_name: 'Taylor',
+        email: 'sophiataylor@example.com',
         profile_picture: 'https://randomuser.me/api/portraits/women/27.jpg',
       }),
     ];
@@ -127,5 +141,10 @@ describe('PassengerController', () => {
     expect(controller.findInvoicesByPassengerId(99999)).rejects.toBeInstanceOf(
       NotFoundException,
     );
+  });
+
+  afterEach(async () => {
+    await module.close();
+    jest.restoreAllMocks();
   });
 });

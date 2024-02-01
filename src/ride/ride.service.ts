@@ -3,6 +3,7 @@ import { CreateRideDTO } from './dto/create-ride.dto';
 import { DatabaseService } from '../database/database.service';
 import { Ride } from './entities/ride.entity';
 import { PatchRideDTO } from './dto/patch-ride.dto';
+import { RideStatus } from './entities/ride-status';
 
 @Injectable()
 export class RideService {
@@ -39,7 +40,7 @@ export class RideService {
         "destination_longitude",
         "driver_id",
         "passenger_id",
-        "is_completed",
+        "status",
         "created_at"
       FROM "rides"
       WHERE "id" = ${id}
@@ -51,7 +52,7 @@ export class RideService {
   async patch(id: number, updateRideDTO: PatchRideDTO): Promise<Ride> {
     await this.databaseService.connection<Ride[]>`
       UPDATE "rides" SET
-      "is_completed" = ${updateRideDTO.is_completed}
+      "status" = ${updateRideDTO.status}
       WHERE "id" = ${id};
     `;
 
@@ -64,7 +65,7 @@ export class RideService {
         "destination_longitude",
         "driver_id",
         "passenger_id",
-        "is_completed",
+        "status",
         "created_at"
       FROM "rides"
       WHERE "id" = ${id}
@@ -73,7 +74,7 @@ export class RideService {
     return new Ride(result);
   }
 
-  async findWhereActive(active: boolean): Promise<Ride[]> {
+  async findWhereActive(status: RideStatus): Promise<Ride[]> {
     const rides = await this.databaseService.connection<Ride[]>`
       SELECT
         "id",
@@ -83,10 +84,10 @@ export class RideService {
         "destination_longitude",
         "driver_id",
         "passenger_id",
-        "is_completed",
+        "status",
         "created_at"
       FROM "rides"
-      WHERE "is_completed" = ${!active}
+      WHERE "status" = ${status}
     `;
 
     return rides.map((ride) => new Ride(ride));
@@ -102,7 +103,7 @@ export class RideService {
         "destination_longitude",
         "driver_id",
         "passenger_id",
-        "is_completed",
+        "status",
         "created_at"
       FROM "rides"
     `;

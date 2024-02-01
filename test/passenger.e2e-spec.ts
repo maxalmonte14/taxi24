@@ -8,7 +8,7 @@ import { PassengerServiceMock } from './mocks/services/passenger.service.mock';
 describe('PassengerController (e2e)', () => {
   let app: INestApplication;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [PassengerModule],
     })
@@ -27,27 +27,37 @@ describe('PassengerController (e2e)', () => {
       .expect([
         {
           id: 1,
-          name: 'Daniel Miller',
+          firstName: 'Daniel',
+          lastName: 'Miller',
+          email: 'danielmiller@example.com',
           profilePicture: 'https://randomuser.me/api/portraits/men/75.jpg',
         },
         {
           id: 2,
-          name: 'Isabella Turner',
+          firstName: 'Isabella',
+          lastName: 'Turner',
+          email: 'isabellaturner@example.com',
           profilePicture: 'https://randomuser.me/api/portraits/women/18.jpg',
         },
         {
           id: 3,
-          name: 'Ethan Wright',
+          firstName: 'Ethan',
+          lastName: 'Wright',
+          email: 'ethanwright@example.com',
           profilePicture: null,
         },
         {
           id: 4,
-          name: 'Madison Adams',
+          firstName: 'Madison',
+          lastName: 'Adams',
+          email: 'madisonadams@example.com',
           profilePicture: 'https://randomuser.me/api/portraits/women/9.jpg',
         },
         {
           id: 5,
-          name: 'Jackson Moore',
+          firstName: 'Jackson',
+          lastName: 'Moore',
+          email: 'jacksonmoore@example.com',
           profilePicture: 'https://randomuser.me/api/portraits/men/91.jpg',
         },
       ]);
@@ -59,7 +69,9 @@ describe('PassengerController (e2e)', () => {
       .expect(200)
       .expect({
         id: 1,
-        name: 'Daniel Miller',
+        firstName: 'Daniel',
+        lastName: 'Miller',
+        email: 'danielmiller@example.com',
         profilePicture: 'https://randomuser.me/api/portraits/men/75.jpg',
       });
   });
@@ -107,7 +119,10 @@ describe('PassengerController (e2e)', () => {
       .expect([
         {
           id: 4,
-          name: 'Samantha White',
+          firstName: 'Samantha',
+          lastName: 'White',
+          email: 'samanthawhite@example.com',
+          licenseNumber: '0000000004',
           profilePicture: 'https://randomuser.me/api/portraits/women/41.jpg',
         },
       ]);

@@ -8,7 +8,13 @@ export class DriverService {
 
   async findAll(): Promise<Driver[]> {
     const drivers = await this.databaseService.connection<Driver[]>`
-      SELECT "id", "name", "profile_picture"
+      SELECT
+        "id",
+        "first_name",
+        "last_name",
+        "email",
+        "license_number",
+        "profile_picture"
       FROM "drivers"
     `;
 
@@ -19,7 +25,10 @@ export class DriverService {
     const drivers = await this.databaseService.connection<Driver[]>`
       SELECT
         "d"."id",
-        "d"."name",
+        "d"."first_name",
+        "d"."last_name",
+        "d"."email",
+        "d"."license_number",
         "d"."profile_picture"
       FROM "drivers" "d"
       JOIN "driver_locations" "dl"
@@ -34,7 +43,10 @@ export class DriverService {
     const drivers = await this.databaseService.connection<Driver[]>`
       SELECT
         "d"."id",
-        "d"."name",
+        "d"."first_name",
+        "d"."last_name",
+        "d"."email",
+        "d"."license_number",
         "d"."profile_picture"
       FROM "drivers" "d"
       JOIN "driver_locations" "dl"
@@ -52,7 +64,13 @@ export class DriverService {
 
   async find(id: number): Promise<Driver> {
     const [driver] = await this.databaseService.connection<Driver[]>`
-      SELECT "id", "name", "profile_picture"
+      SELECT 
+        "id",
+        "first_name",
+        "last_name",
+        "email",
+        "license_number",
+        "profile_picture"
       FROM "drivers"
       WHERE "id" = ${id}
     `;

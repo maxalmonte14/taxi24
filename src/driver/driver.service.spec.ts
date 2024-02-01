@@ -5,10 +5,11 @@ import { DriverService } from './driver.service';
 import { Driver } from './entities/driver.entity';
 
 describe('DriverService', () => {
+  let module: TestingModule;
   let service: DriverService;
 
-  beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+  beforeEach(async () => {
+    module = await Test.createTestingModule({
       providers: [ConfigService, DatabaseService, DriverService],
     }).compile();
 
@@ -26,7 +27,10 @@ describe('DriverService', () => {
     expect(drivers).toContainEqual(
       new Driver({
         id: 1,
-        name: 'John Doe',
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'johndoe@example.com',
+        license_number: '0000000001',
         profile_picture: 'https://randomuser.me/api/portraits/men/76.jpg',
       }),
     );
@@ -40,7 +44,10 @@ describe('DriverService', () => {
     expect(drivers).toContainEqual(
       new Driver({
         id: 2,
-        name: 'Jane Smith',
+        first_name: 'Jane',
+        last_name: 'Smith',
+        email: 'janesmith@example.com',
+        license_number: '0000000002',
         profile_picture: 'https://randomuser.me/api/portraits/women/16.jpg',
       }),
     );
@@ -54,7 +61,10 @@ describe('DriverService', () => {
     expect(drivers).toContainEqual(
       new Driver({
         id: 1,
-        name: 'John Doe',
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'johndoe@example.com',
+        license_number: '0000000001',
         profile_picture: 'https://randomuser.me/api/portraits/men/76.jpg',
       }),
     );
@@ -71,12 +81,18 @@ describe('DriverService', () => {
     expect(drivers).toEqual([
       new Driver({
         id: 4,
-        name: 'Samantha White',
+        first_name: 'Samantha',
+        last_name: 'White',
+        email: 'samanthawhite@example.com',
+        license_number: '0000000004',
         profile_picture: 'https://randomuser.me/api/portraits/women/41.jpg',
       }),
       new Driver({
         id: 6,
-        name: 'Emily Davis',
+        first_name: 'Emily',
+        last_name: 'Davis',
+        email: 'emilydavis@example.com',
+        license_number: '0000000006',
         profile_picture: null,
       }),
     ]);
@@ -90,15 +106,22 @@ describe('DriverService', () => {
     expect(driver).toEqual(
       new Driver({
         id: 1,
-        name: 'John Doe',
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'johndoe@example.com',
+        license_number: '0000000001',
         profile_picture: 'https://randomuser.me/api/portraits/men/76.jpg',
       }),
     );
   });
 
-  it('throws error when trying to get a driver by id that does not exist', async () => {
+  it('throws error when trying to get a driver by id that does not exist', () => {
     expect(service.find(99999)).rejects.toThrow(
       'We could not find a driver with id: 99999.',
     );
+  });
+
+  afterEach(async () => {
+    await module.close();
   });
 });

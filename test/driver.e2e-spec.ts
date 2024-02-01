@@ -29,27 +29,42 @@ describe('DriverController (e2e)', () => {
       .expect([
         {
           id: 1,
-          name: 'John Doe',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'johndoe@example.com',
+          licenseNumber: '0000000001',
           profilePicture: 'https://randomuser.me/api/portraits/men/76.jpg',
         },
         {
           id: 2,
-          name: 'Jane Smith',
+          firstName: 'Jane',
+          lastName: 'Smith',
+          email: 'janesmith@example.com',
+          licenseNumber: '0000000002',
           profilePicture: 'https://randomuser.me/api/portraits/women/16.jpg',
         },
         {
           id: 3,
-          name: 'Robert Johnson',
+          firstName: 'Robert',
+          lastName: 'Johnson',
+          email: 'robertjohnson@example.com',
+          licenseNumber: '0000000003',
           profilePicture: null,
         },
         {
           id: 4,
-          name: 'Samantha White',
+          firstName: 'Samantha',
+          lastName: 'White',
+          email: 'samanthawhite@example.com',
+          licenseNumber: '0000000004',
           profilePicture: 'https://randomuser.me/api/portraits/women/41.jpg',
         },
         {
           id: 5,
-          name: 'Michael Brown',
+          firstName: 'Michael',
+          lastName: 'Brown',
+          email: 'michaelbrown@example.com',
+          licenseNumber: '0000000005',
           profilePicture: 'https://randomuser.me/api/portraits/men/90.jpg',
         },
       ]);
@@ -62,12 +77,18 @@ describe('DriverController (e2e)', () => {
       .expect([
         {
           id: 2,
-          name: 'Jane Smith',
+          firstName: 'Jane',
+          lastName: 'Smith',
+          email: 'janesmith@example.com',
+          licenseNumber: '0000000002',
           profilePicture: 'https://randomuser.me/api/portraits/women/16.jpg',
         },
         {
           id: 4,
-          name: 'Samantha White',
+          firstName: 'Samantha',
+          lastName: 'White',
+          email: 'samanthawhite@example.com',
+          licenseNumber: '0000000004',
           profilePicture: 'https://randomuser.me/api/portraits/women/41.jpg',
         },
       ]);
@@ -80,17 +101,26 @@ describe('DriverController (e2e)', () => {
       .expect([
         {
           id: 1,
-          name: 'John Doe',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'johndoe@example.com',
+          licenseNumber: '0000000001',
           profilePicture: 'https://randomuser.me/api/portraits/men/76.jpg',
         },
         {
           id: 3,
-          name: 'Robert Johnson',
+          firstName: 'Robert',
+          lastName: 'Johnson',
+          email: 'robertjohnson@example.com',
+          licenseNumber: '0000000003',
           profilePicture: null,
         },
         {
           id: 5,
-          name: 'Michael Brown',
+          firstName: 'Michael',
+          lastName: 'Brown',
+          email: 'michaelbrown@example.com',
+          licenseNumber: '0000000005',
           profilePicture: 'https://randomuser.me/api/portraits/men/90.jpg',
         },
       ]);
@@ -105,7 +135,10 @@ describe('DriverController (e2e)', () => {
       .expect([
         {
           id: 4,
-          name: 'Samantha White',
+          firstName: 'Samantha',
+          lastName: 'White',
+          email: 'samanthawhite@example.com',
+          licenseNumber: '0000000004',
           profilePicture: 'https://randomuser.me/api/portraits/women/41.jpg',
         },
       ]);
@@ -128,7 +161,10 @@ describe('DriverController (e2e)', () => {
   it('/drivers/1 (GET)', () => {
     return request(app.getHttpServer()).get('/drivers/1').expect(200).expect({
       id: 1,
-      name: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe@example.com',
+      licenseNumber: '0000000001',
       profilePicture: 'https://randomuser.me/api/portraits/men/76.jpg',
     });
   });

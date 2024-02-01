@@ -1,6 +1,7 @@
 import { CreateRideDTO } from '../../../src/ride/dto/create-ride.dto';
 import { rideDataset } from '../../datasets/ride.dataset';
 import { Ride } from '../../../src/ride/entities/ride.entity';
+import { RideStatus } from '../../../src/ride/entities/ride-status';
 
 export class RideServiceMock {
   private rideDataset: Ride[];
@@ -17,7 +18,7 @@ export class RideServiceMock {
     const newRide = new Ride({
       id: this.rideDataset.length + 1,
       created_at: new Date('2024-01-31T20:12:51.843Z'),
-      is_completed: false,
+      status: RideStatus.ACTIVE,
       origin_latitude: createRideDTO.origin_latitude,
       origin_longitude: createRideDTO.origin_longitude,
       destination_latitude: createRideDTO.destination_latitude,

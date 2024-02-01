@@ -10,7 +10,12 @@ export class PassengerService {
 
   async findAll(): Promise<Passenger[]> {
     const passengers = await this.databaseService.connection<Passenger[]>`
-      SELECT "id", "name", "profile_picture"
+      SELECT
+        "id",
+        "first_name",
+        "last_name",
+        "email",
+        "profile_picture"
       FROM "passengers"
     `;
 
@@ -19,7 +24,12 @@ export class PassengerService {
 
   async find(id: number): Promise<Passenger> {
     const [passenger] = await this.databaseService.connection<Passenger[]>`
-      SELECT "id", "name", "profile_picture"
+      SELECT
+        "id",
+        "first_name",
+        "last_name",
+        "email",
+        "profile_picture"
       FROM "passengers"
       WHERE "id" = ${id}
     `;
@@ -51,7 +61,10 @@ export class PassengerService {
     const drivers = await this.databaseService.connection<Driver[]>`
       SELECT
         "d"."id",
-        "d"."name",
+        "d"."first_name",
+        "d"."last_name",
+        "d"."email",
+        "d"."license_number",
         "d"."profile_picture"
       FROM "drivers" "d"
       INNER JOIN "driver_locations" "dl"

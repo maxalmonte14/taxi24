@@ -4,6 +4,7 @@ import * as request from 'supertest';
 import { RideModule } from '../src/ride/ride.module';
 import { RideService } from '../src/ride/ride.service';
 import { RideServiceMock } from './mocks/services/ride.service.mock';
+import { RideStatus } from '../src/ride/entities/ride-status';
 
 describe('RideController (e2e)', () => {
   let app: INestApplication;
@@ -35,7 +36,7 @@ describe('RideController (e2e)', () => {
           destinationLongitude: '-69.93931318010746',
           driverId: 1,
           passengerId: 1,
-          isCompleted: true,
+          status: RideStatus.COMPLETED,
           createdAt: '2024-01-31T19:09:57.820Z',
         },
         {
@@ -46,7 +47,7 @@ describe('RideController (e2e)', () => {
           destinationLongitude: '-70.00017055080171',
           driverId: 2,
           passengerId: 2,
-          isCompleted: false,
+          status: RideStatus.ACTIVE,
           createdAt: '2024-01-31T19:09:57.823Z',
         },
         {
@@ -57,7 +58,7 @@ describe('RideController (e2e)', () => {
           destinationLongitude: '-69.91942939559058',
           driverId: 3,
           passengerId: 3,
-          isCompleted: true,
+          status: RideStatus.COMPLETED,
           createdAt: '2024-01-31T19:09:57.825Z',
         },
         {
@@ -68,7 +69,7 @@ describe('RideController (e2e)', () => {
           destinationLongitude: '-69.88324792276927',
           driverId: 4,
           passengerId: 4,
-          isCompleted: false,
+          status: RideStatus.ACTIVE,
           createdAt: '2024-01-31T19:09:57.827Z',
         },
         {
@@ -79,7 +80,7 @@ describe('RideController (e2e)', () => {
           destinationLongitude: '-69.86048468939171',
           driverId: 5,
           passengerId: 5,
-          isCompleted: true,
+          status: RideStatus.COMPLETED,
           createdAt: '2024-01-31T19:09:57.830Z',
         },
       ]);
