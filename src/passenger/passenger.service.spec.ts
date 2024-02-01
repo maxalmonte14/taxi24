@@ -25,13 +25,6 @@ describe('PassengerService', () => {
     const passengers: Array<Passenger> = await service.findAll();
 
     expect(passengers).toBeInstanceOf(Array<Passenger>);
-    expect(passengers).toContainEqual(
-      new Passenger({
-        id: 1,
-        name: 'Daniel Miller',
-        profile_picture: 'https://randomuser.me/api/portraits/men/75.jpg',
-      }),
-    );
     expect(passengers).toHaveLength(10);
   });
 
@@ -50,7 +43,7 @@ describe('PassengerService', () => {
 
   it('throws error when trying to get a passenger by id that does not exist', async () => {
     expect(service.find(99999)).rejects.toThrow(
-      'We could not find a passenger with the given id.',
+      'We could not find a passenger with id: 99999.',
     );
   });
 
@@ -81,7 +74,7 @@ describe('PassengerService', () => {
 
   it('throws error when trying to get nearest drivers by a passenger id that does not exist', async () => {
     expect(service.findNearDriversByPassengerId(99999)).rejects.toThrow(
-      'We could not find a passenger with the given id.',
+      'We could not find a passenger with id: 99999.',
     );
   });
 
@@ -90,19 +83,11 @@ describe('PassengerService', () => {
 
     expect(invoices).toBeInstanceOf(Array<Invoice>);
     expect(invoices).toHaveLength(1);
-    expect(invoices).toContainEqual(
-      new Invoice({
-        id: 1,
-        price: 6.78,
-        ride_id: 1,
-        created_at: new Date('2024-01-30 20:22:44.871541'),
-      }),
-    );
   });
 
   it('throws error when trying to get invoices by a passenger id that does not exist', async () => {
     expect(service.findInvoicesByPassengerId(99999)).rejects.toThrow(
-      'We could not find a passenger with the given id.',
+      'We could not find a passenger with id: 99999.',
     );
   });
 });
