@@ -1,4 +1,5 @@
 import {
+  ApiBadRequestResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -16,6 +17,8 @@ import {
 } from '@nestjs/common';
 import { Driver } from './entities/driver.entity';
 import { DriverService } from './driver.service';
+import { Coordinate } from './dto/coordinate.dto';
+import { InvalidRequestResponse } from '../exception/dto/invalid-request-response.dto';
 import { NotFoundResponse } from '../exception/dto/not-found-response.dto';
 
 @ApiTags('drivers')
@@ -57,11 +60,15 @@ export class DriverController {
     isArray: true,
     type: Driver,
   })
-  async findInRadius(
-    @Query('latitude') latitude: string,
-    @Query('longitude') longitude: string,
-  ): Promise<Driver[]> {
-    return this.driverService.findInRadius(latitude, longitude);
+  @ApiBadRequestResponse({
+    description: 'Request is invalid.',
+    type: InvalidRequestResponse,
+  })
+  async findInRadius(@Query() coordinate: Coordinate): Promise<Driver[]> {
+    return this.driverService.findInRadius(
+      coordinate.latitude,
+      coordinate.longitude,
+    );
   }
 
   @Get(':id')
