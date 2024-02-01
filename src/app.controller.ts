@@ -1,12 +1,21 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AppStatus } from './app-status.dto';
+import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor() {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('/status')
+  @ApiOperation({ summary: 'Get the current status of the application' })
+  @ApiOkResponse({
+    description: 'Request has been successful.',
+    type: AppStatus,
+  })
+  status(): AppStatus {
+    return new AppStatus({
+      date: new Date(),
+      status: 'up',
+    });
   }
 }
