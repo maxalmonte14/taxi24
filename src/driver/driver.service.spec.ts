@@ -98,7 +98,7 @@ describe('DriverService', () => {
 
   it('throws error when trying to get a driver by id that does not exist', async () => {
     expect(service.find(99999)).rejects.toThrow(
-      'We could not find a driver with the given id.',
+      'We could not find a driver with id: 99999.',
     );
   });
 });
